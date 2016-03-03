@@ -1,2 +1,2 @@
-# LoRa-Sensor-
+# LoRa-Sensor
 Sense temperature
