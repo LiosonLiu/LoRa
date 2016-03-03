@@ -1,0 +1,19 @@
+[Last Settings]
+Hardware=RLINK
+PROTOCOL=SWIM
+Port=USB
+DEVICE=STM8S103K3
+Verify after programming=1
+Blank check before programming (when available)=1
+Erase device memory before programming (when available)=0
+Unlock protection before a programming cycle=0
+[DATA MEMORY]
+Count=0
+ProgramEvenIfBlank=0
+[PROGRAM MEMORY]
+Count=0
+ProgramEvenIfBlank=0
+[OPTION BYTE]
+Count=1
+File0=D:\Project\Lora\LoRa-STM103-master\sx1278_demo_code_20140804_pro_Programmer\sx1278_demo_code_20140804_pro_STVP_OPTION BYTE.hex
+ProgramEvenIfBlank=0

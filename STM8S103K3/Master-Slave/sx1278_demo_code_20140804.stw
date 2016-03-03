@@ -1,0 +1,12 @@
+;	STMicroelectronics Workspace file
+
+[Version]
+Keyword=ST7Workspace-V0.7
+
+[Project0]
+Filename=sx1278_demo_code_20140804_pro.stp
+Dependencies=
+[Options]
+ActiveProject=sx1278_demo_code_20140804_pro
+ActiveConfig=Debug
+AddSortedElements=1
