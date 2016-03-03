@@ -9,10 +9,11 @@
 4.LoRa module:SFM-1L
 
 5.Function  : Master->Sned Message
-
+              
               Slave->Receive Message-> Send Message back to Master
               
 6.Payload   : 21bytes
 
-Note: SFM-1L module has 26MHz crystal on board, not 32MHz. RegFrf= 
-  #
+Note: SFM-1L module has 26MHz crystal on board, not 32MHz. RegFrf= 0x85, 0x3b, 0x13
+
+
