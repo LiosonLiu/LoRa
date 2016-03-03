@@ -4,5 +4,9 @@
 Keyword=ST7Workspace-V0.7
 
 [Project0]
-Filename=sx1278_demo_code_20140804_pro.stp
+Filename=sensor.stp
 Dependencies=
+[Options]
+ActiveProject=sensor
+ActiveConfig=Debug
+AddSortedElements=1
