@@ -190,7 +190,6 @@
 /*********************************************************/
 //command
 /*********************************************************/
-extern u8 key_flag;
 /*{
 	uchar	:key1_shot_down;
 	uchar	:key1_long_down;
@@ -213,6 +212,7 @@ extern void delay_us(unsigned int us);
 
 
 extern u8 RxData[64];
+extern u8 Message[30];
 extern void sx1278_Config(void);
 extern u8 sx1278_LoRaEntryRx(void);
 extern u8 sx1278_LoRaReadRSSI(void);

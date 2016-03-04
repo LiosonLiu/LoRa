@@ -14,6 +14,7 @@ Note: Check IO.h for pin config
 *************************************************/
 
 #include "main.h" 
+#include "dht11.h"
 u16 SysTime;
 u16 time2_count;
 u8 rf_rx_packet_length;
@@ -58,6 +59,8 @@ void power_on_config_read(void);
 /******delay*************/
 void delay_ms(unsigned int ms);
 void delay_us(unsigned int us);
+void InitialMessageSlave(void);
+void InitialMessageMaster(void);
 
 #define Transmit=1;
 #define Receive=0;
@@ -92,14 +95,15 @@ void main()
 	sx1278_Config();
   sx1278_LoRaEntryRx();
 	TIM1_CR1 |= 0x01;			//enable time1
-	MasterModeFlag=0;
-	while(1)
+	MasterModeFlag=0;	
+while(1)
 	{
 	if(GetOption())	//Slave
 		{
 		if(SystemFlag&PreviousOptionBit)
 			{
 			sx1278_LoRaEntryRx();
+			InitialMessageSlave();
 			SystemFlag&=(!PreviousOptionBit);
 			}
 		if(sx1278_LoRaRxPacket())
@@ -112,13 +116,15 @@ void main()
 			sx1278_LoRaTxPacket();
 			RED_LED_H();
 			sx1278_LoRaEntryRx();
-			}		
+			}
+		ReadDHT11();			//Read Temperature & Humidity
 		}
 	else					//Master
 		{
 		if((SystemFlag&PreviousOptionBit)==0)
 			{
 			MasterModeFlag=0;
+			InitialMessageMaster();
 			SystemFlag|=PreviousOptionBit;
 			}			
 		switch(MasterModeFlag)
@@ -209,7 +215,7 @@ void GPIO_Init(void)
 		PE_CR2 = 0b00100000;
 		PE_ODR = 0b00100000;
 	
-		PF_DDR = 0b00000000;							
+		PF_DDR = 0b00010000;							
 		PF_CR1 = 0b11111111;	 			
 		PF_CR2 = 0b00000000;							
 		PF_ODR = 0b00000000;
@@ -257,6 +263,78 @@ void TIM_Init(void)
 		TIM4_CR1   |= 0x80;						//bit ARPE set to 1 enable automatic reload \URS set to 1 refresh interrupt only whne counter is overflowed*/
 		
 }
+
+//=====================================
+void InitialMessageSlave(void)
+//=====================================
+{
+	Message[0]='E';
+	Message[1]='X';
+	Message[2]='O';
+	Message[3]='S';
+	Message[4]='I';
+	Message[5]='T';
+	Message[6]='E';	
+	Message[7]=FLASH_ReadByte(0x4870);	//ID
+	Message[8]=FLASH_ReadByte(0x486f);
+	Message[9]=FLASH_ReadByte(0x486e);
+	Message[10]=FLASH_ReadByte(0x486d);
+	Message[11]=FLASH_ReadByte(0x486c);
+	Message[12]=FLASH_ReadByte(0x486b);
+	Message[13]=FLASH_ReadByte(0x486a);
+	Message[14]=FLASH_ReadByte(0x4869);
+	Message[15]=FLASH_ReadByte(0x4868);
+	Message[16]=FLASH_ReadByte(0x4867);
+	Message[17]=FLASH_ReadByte(0x4866);
+	Message[18]=FLASH_ReadByte(0x4865);
+	Message[19]=FLASH_ReadByte(0x4864);
+	Message[20]=FLASH_ReadByte(0x4863);
+	Message[21]=FLASH_ReadByte(0x4862);
+	Message[22]=FLASH_ReadByte(0x4861);
+	Message[23]=FLASH_ReadByte(0x4860); //ID
+	Message[24]=0;
+	Message[25]=0;
+	Message[26]=0;
+	Message[27]=0;
+	Message[28]=0;
+	Message[29]=0;
+}
+
+//=====================================
+void InitialMessageMaster(void)
+//=====================================
+{
+	Message[0]='E';
+	Message[1]='X';
+	Message[2]='O';
+	Message[3]='S';
+	Message[4]='I';
+	Message[5]='T';
+	Message[6]='E';	
+	Message[7]=0;
+	Message[8]=0;
+	Message[9]=0;
+	Message[10]=0;
+	Message[11]=0;
+	Message[12]=0;
+	Message[13]=0;
+	Message[14]=0;
+	Message[15]=0;
+	Message[16]=0;
+	Message[17]=0;
+	Message[18]=0;
+	Message[19]=0;
+	Message[20]=0;
+	Message[21]=0;
+	Message[22]=0;
+	Message[23]=0;
+	Message[24]=0;
+	Message[25]=0;
+	Message[26]=0;
+	Message[27]=0;
+	Message[28]=0;
+	Message[29]=0;	
+}	
 
 //=====================================
 void delay_ms(unsigned int ms)

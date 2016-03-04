@@ -19,3 +19,18 @@
 #define ANT_CTRL_RX()				PC_ODR |= 0b00000100								//PC2
 #define ANT_CTRL_TX()				PC_ODR &= 0b11111011
 #define GetOption()					(PC_IDR & 0b00000010) == 0b00000010	//PC1
+#define FAN_H()							PF_ODR |= 0b00010000								//PF4
+#define FAN_L()							PF_ODR &= 0b11101111
+
+//================DHT11========================
+#define SET_DATA_PIN_OUTPUT()	PA_DDR  |= 0b00001000								//PA3
+#define SET_DATA_PIN_INPUT()	PA_DDR	&= 0b11110111
+#define SET_DATA_PIN_H()			PA_ODR 	|= 0b00001000								//PA3
+#define SET_DATA_PIN_L()			PA_ODR	&= 0b11110111
+#define GET_DATA_PIN()				(PA_IDR &= 0b00001000)							//PA3
+
+//================DEBUG========================
+#define SET_DEBUG_PIN_OUTPUT()	PB_DDR	|= 0b10000000							//PB7
+#define SET_DEBUG_PIN_INTPUT()	PB_DDR	&= 0b01111111
+#define	SET_DEBUG_PIN_H()				PB_ODR	|= 0b10000000
+#define	SET_DEBUG_PIN_L()				PB_ODR	&= 0b01111111

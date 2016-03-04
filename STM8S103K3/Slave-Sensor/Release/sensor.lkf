@@ -50,6 +50,7 @@ crtsi0.sm8
 
 # Object files list - section reserved for STVD
 #<BEGIN OBJECT_FILES>
+Release\dht11.o
 Release\main.o
 Release\spi.o
 Release\stm8s_flash.o

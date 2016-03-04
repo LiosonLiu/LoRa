@@ -16,7 +16,7 @@
 //  Tx Power Output:     20dbm/17dbm/14dbm/11dbm
 //  Receive Bandwidth:   7.8KHz/10.4KHz/15.6KHz/20.8KHz/31.2KHz/41.7KHz/62.5KHz/125KHz/250KHz/500KHz
 //  Coding:              NRZ
-//  Packet Format:       "Mark1 Lora sx1278" (total: 21 bytes)
+//  Packet Format:       "Mark1 Lora sx1278" (total: 30 bytes)
 //  Tx Current:          about 120mA  (RFOP=+20dBm,typ.)
 //  Rx Current:          about 11.5mA  (typ.)       
 **********************************************************/
@@ -26,6 +26,7 @@ const u8 sx1278PowerTable[4] 				= {0xFF,0xFC,0xF9,0xF6};    //20dbm,17dbm,14dbm
 const u8 sx1278SpreadFactorTable[7] =	{6,7,8,9,10,11,12};
 const u8 sx1278LoRaBwTable[10] 			=	{0,1,2,3,4,5,6,7,8,9};		//7.8KHz,10.4KHz,15.6KHz,20.8KHz,31.2KHz,41.7KHz,62.5KHz,125KHz,250KHz,500KHz
 const u8 sx1278Data[] 							= {"**Exosite LoRa Demo**"};
+u8 Message[30];
 u8 RxData[64];
 
 #define LoRa_Standby_Value	0x09
@@ -48,7 +49,7 @@ u8 sx1278_LoRaEntryRx(void)
   SPIWrite(REG_LR_DIOMAPPING1,0x01);              //DIO0=00, DIO1=00, DIO2=00, DIO3=01 Valid header      
   SPIWrite(LR_RegIrqFlagsMask,0x3F);              //Open RxDone interrupt & Timeout
   SPIWrite(LR_RegIrqFlags,LoRa_ClearIRQ_Value);     
-  SPIWrite(LR_RegPayloadLength,21);               //RegPayloadLength  21byte(this register must difine when the data long of one byte in SF is 6)
+  SPIWrite(LR_RegPayloadLength,30);               //RegPayloadLength  30byte(this register must difine when the data long of one byte in SF is 6)
   addr = SPIRead(LR_RegFifoRxBaseAddr);           //Read RxBaseAddr
   SPIWrite(LR_RegFifoAddrPtr,addr);               //RxBaseAddr -> FiFoAddrPtr¡¡ 
   SPIWrite(LR_RegOpMode,0x8d);                    //Continuous Rx Mode//Low Frequency Mode
@@ -87,14 +88,14 @@ u8 sx1278_LoRaRxPacket(void)
     addr = SPIRead(LR_RegFifoRxCurrentaddr);      //last packet addr
     SPIWrite(LR_RegFifoAddrPtr,addr);             //RxBaseAddr -> FiFoAddrPtr    
     if(sx1278SpreadFactorTable[Lora_Rate_Sel]==6)	//When SpreadFactor is six£¬will used Implicit Header mode(Excluding internal packet length)
-      packet_size=21;
+      packet_size=30;
     else
       packet_size = SPIRead(LR_RegRxNbBytes);     //Number for received bytes    
     SPIBurstRead(0x00, RxData, packet_size);    
     SPIWrite(LR_RegIrqFlags,LoRa_ClearIRQ_Value);
     for(i=0;i<17;i++)
     {
-      if(RxData[i]!=sx1278Data[i])
+      if(RxData[i]!=Message[i])
         break;  
     }    
     if(i>=17)                                     //Rx success
@@ -119,14 +120,14 @@ u8 sx1278_LoRaEntryTx(void)
   SPIWrite(REG_LR_DIOMAPPING1,0x41);              //DIO0=01, DIO1=00, DIO2=00, DIO3=01  
   SPIWrite(LR_RegIrqFlags,LoRa_ClearIRQ_Value);
   SPIWrite(LR_RegIrqFlagsMask,0xF7);              //Open TxDone interrupt
-  SPIWrite(LR_RegPayloadLength,21);               //RegPayloadLength  21byte  
+  SPIWrite(LR_RegPayloadLength,30);               //RegPayloadLength  30byte  
   addr = SPIRead(LR_RegFifoTxBaseAddr);           //RegFiFoTxBaseAddr
   SPIWrite(LR_RegFifoAddrPtr,addr);               //RegFifoAddrPtr
 	SysTime = 0;
 	while(1)
 	{
 		temp=SPIRead(LR_RegPayloadLength);
-		if(temp==21)
+		if(temp==30)
 		{
 			break; 
 		}
@@ -142,7 +143,8 @@ u8 sx1278_LoRaTxPacket(void)
   u8 TxFlag=0;
   u8 addr;
   
-	BurstWrite(0x00, (u8 *)sx1278Data, 21);
+	//BurstWrite(0x00, (u8 *)sx1278Data, 30);
+	BurstWrite(0x00, Message, 30);
 	SPIWrite(LR_RegOpMode,0x8b);                    	//Tx Mode           
 	while(1)
 	{
