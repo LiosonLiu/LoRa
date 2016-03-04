@@ -92,13 +92,13 @@ u8 sx1278_LoRaRxPacket(void)
     else
       packet_size = SPIRead(LR_RegRxNbBytes);     //Number for received bytes    
     SPIBurstRead(0x00, RxData, packet_size);    
-    SPIWrite(LR_RegIrqFlags,LoRa_ClearIRQ_Value);
-    for(i=0;i<17;i++)
+    SPIWrite(LR_RegIrqFlags,LoRa_ClearIRQ_Value);	//Word "EXOSITE" received?
+    for(i=0;i<7;i++)
     {
       if(RxData[i]!=Message[i])
         break;  
     }    
-    if(i>=17)                                     //Rx success
+    if(i>=7)                                     //Rx success
       return(1);
     else
       return(0);

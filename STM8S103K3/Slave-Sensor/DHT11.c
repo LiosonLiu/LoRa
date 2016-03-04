@@ -16,12 +16,9 @@ void ReadDHT11(void)
 {
 //Debug process
 SET_DATA_PIN_OUTPUT();
-SET_DEBUG_PIN_OUTPUT();
 SET_DATA_PIN_L();	
-SET_DEBUG_PIN_L();
 delay_ms(20);
 SET_DATA_PIN_H();
-SET_DEBUG_PIN_H();
 SET_DATA_PIN_INPUT();
 //Wait Response
 if(PulseHighRead()==MaxTimeValue)
@@ -83,7 +80,6 @@ for(high=0;high<MaxTimeValue;high++)
 	if(GET_DATA_PIN()==0)	
 		return high;
 	}
-SET_DEBUG_PIN_L();
 }
 //=====================================
 u16 PulseLowRead(void)
@@ -94,7 +90,6 @@ for(low=0;low<MaxTimeValue;low++)
 	{
 	if(GET_DATA_PIN()!=0)	
 		return low;
-	}
-SET_DEBUG_PIN_L();	
+	}	
 }
 

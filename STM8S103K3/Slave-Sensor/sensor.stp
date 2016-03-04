@@ -61,7 +61,7 @@ String.100.2=STM8 Cosmic
 String.100.3=ST7 Metrowerks V1.1
 String.100.4=Raisonance
 String.101.0=STM8 Cosmic
-String.102.0=C:\Program Files (x86)\COSMIC
+String.102.0=
 String.103.0=
 String.104.0=Hstm8
 String.105.0=Lib
@@ -141,7 +141,7 @@ String.100.2=STM8 Cosmic
 String.100.3=ST7 Metrowerks V1.1
 String.100.4=Raisonance
 String.101.0=STM8 Cosmic
-String.102.0=C:\Program Files (x86)\COSMIC
+String.102.0=
 String.103.0=
 String.104.0=Hstm8
 String.105.0=Lib
@@ -215,7 +215,7 @@ String.6.0=2016,3,3,21,30,54
 [Root.Source Files]
 ElemType=Folder
 PathName=Source Files
-Child=Root.Source Files.main.c
+Child=Root.Source Files.dht11.c
 Next=Root.Include Files
 Config.0=Root.Source Files.Config.0
 Config.1=Root.Source Files.Config.1
@@ -286,6 +286,11 @@ String.4.0=
 String.5.0=
 String.6.0=2016,3,3,21,30,54
 
+[Root.Source Files.dht11.c]
+ElemType=File
+PathName=dht11.c
+Next=Root.Source Files.main.c
+
 [Root.Source Files.main.c]
 ElemType=File
 PathName=main.c
@@ -313,7 +318,7 @@ PathName=sx1276_7_8.c
 [Root.Include Files]
 ElemType=Folder
 PathName=Include Files
-Child=Root.Include Files.io.h
+Child=Root.Include Files.dht11.h
 Config.0=Root.Include Files.Config.0
 Config.1=Root.Include Files.Config.1
 
@@ -382,6 +387,11 @@ String.3.0=
 String.4.0=
 String.5.0=
 String.6.0=2016,3,3,21,30,54
+
+[Root.Include Files.dht11.h]
+ElemType=File
+PathName=dht11.h
+Next=Root.Include Files.io.h
 
 [Root.Include Files.io.h]
 ElemType=File

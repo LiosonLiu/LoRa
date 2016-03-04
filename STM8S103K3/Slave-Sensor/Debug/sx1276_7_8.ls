@@ -182,10 +182,10 @@
 2921  00c0 4f            	clr	a
 2922  00c1 cd0000        	call	_SPIBurstRead
 2924  00c4 5b03          	addw	sp,#3
-2925                     ; 95     SPIWrite(LR_RegIrqFlags,LoRa_ClearIRQ_Value);
+2925                     ; 95     SPIWrite(LR_RegIrqFlags,LoRa_ClearIRQ_Value);	//Word "EXOSITE" received?
 2927  00c6 ae12ff        	ldw	x,#4863
 2928  00c9 cd0000        	call	_SPIWrite
-2930                     ; 96     for(i=0;i<17;i++)
+2930                     ; 96     for(i=0;i<7;i++)
 2932  00cc 0f01          	clr	(OFST+0,sp)
 2933  00ce               L7471:
 2934                     ; 98       if(RxData[i]!=Message[i])
@@ -199,15 +199,15 @@
 2943  00db e100          	cp	a,(_Message,x)
 2944  00dd 2608          	jrne	L3571
 2945                     ; 99         break;  
-2947                     ; 96     for(i=0;i<17;i++)
+2947                     ; 96     for(i=0;i<7;i++)
 2949  00df 0c01          	inc	(OFST+0,sp)
 2952  00e1 7b01          	ld	a,(OFST+0,sp)
-2953  00e3 a111          	cp	a,#17
+2953  00e3 a107          	cp	a,#7
 2954  00e5 25e7          	jrult	L7471
 2955  00e7               L3571:
-2956                     ; 101     if(i>=17)                                     //Rx success
+2956                     ; 101     if(i>=7)                                     //Rx success
 2958  00e7 7b01          	ld	a,(OFST+0,sp)
-2959  00e9 a111          	cp	a,#17
+2959  00e9 a107          	cp	a,#7
 2960  00eb 2505          	jrult	L7571
 2961                     ; 102       return(1);
 2963  00ed a601          	ld	a,#1
