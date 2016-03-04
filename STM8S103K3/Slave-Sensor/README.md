@@ -12,7 +12,7 @@
 
               Slave->Receive Message-> Send Message back to Master
               
-6.Payload   : 21bytes
+6.Payload   : 30bytes
 
 Note: SFM-1L module has 26MHz crystal on board, not 32MHz. RegFrf= 
   #
