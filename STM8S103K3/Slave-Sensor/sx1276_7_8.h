@@ -27,7 +27,6 @@
 #include "io.h"
 	
 
-
 ///////////////////////////////////////////////// LoRa mode //////////////////////////////////////////////////
 //Error Coding rate (CR)setting 
 #define CR_4_5    
@@ -203,6 +202,8 @@
 extern u8 mode;
 extern u8 Freq_Sel;
 extern u8 Power_Sel;
+extern u8 PA_Over_Current_Sel;
+extern u8 Gain_Sel;
 extern u8 Lora_Rate_Sel;
 extern u8 BandWide_Sel;
 extern u8 Fsk_Rate_Sel;

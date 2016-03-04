@@ -1,89 +1,89 @@
 
-Map of Debug\sensor.sm8 from link file Debug\sensor.lkf - Fri Mar 04 17:44:22 2016
+Map of Debug\sensor.sm8 from link file Debug\sensor.lkf - Sat Mar 05 00:05:07 2016
 
 
                                --------
                                Segments
                                --------
 
-start 00008080 end 000080be length    62 segment .const
-start 000080c1 end 00008a65 length  2468 segment .text
+start 00008080 end 000080ca length    74 segment .const
+start 000080cd end 00008a8a length  2493 segment .text
 start 00004000 end 00004000 length     0 segment .eeprom
 start 00000000 end 00000000 length     0 segment .bsct
-start 00000000 end 0000007f length   127 segment .ubsct
-start 0000007f end 0000007f length     0 segment .bit
-start 0000007f end 0000007f length     0 segment .share
+start 00000000 end 00000081 length   129 segment .ubsct
+start 00000081 end 00000081 length     0 segment .bit
+start 00000081 end 00000081 length     0 segment .share
 start 00000100 end 00000100 length     0 segment .data
 start 00000100 end 00000100 length     0 segment .bss
 start 00000000 end 000003fc length  1020 segment .info.
-start 00000000 end 0000b827 length 47143 segment .debug
+start 00000000 end 0000b8ad length 47277 segment .debug
 start 00008000 end 00008080 length   128 segment .const
-start 000080be end 000080c1 length     3 segment .init
+start 000080ca end 000080cd length     3 segment .init
 
 
                                -------
                                Modules
                                -------
 
-D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\crtsi0.sm8:
-start 000080c1 end 0000810c length    75 section .text
+C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\crtsi0.sm8:
+start 000080cd end 00008118 length    75 section .text
 start 00000100 end 00000100 length     0 section .bss
 start 00000000 end 00000000 length     0 section .ubsct
 start 00000000 end 00000030 length    48 section .info.
 
 Debug\dht11.o:
-start 0000810c end 0000821f length   275 section .text
+start 00008118 end 0000822b length   275 section .text
 start 00000000 end 00000009 length     9 section .ubsct
 start 00000000 end 00001d8c length  7564 section .debug
 start 00000030 end 0000009e length   110 section .info.
 
 Debug\main.o:
-start 0000821f end 000085ae length   911 section .text
-start 00000009 end 00000017 length    14 section .ubsct
-start 00001d8c end 00003dd0 length  8260 section .debug
+start 0000822b end 000085c6 length   923 section .text
+start 00000009 end 00000019 length    16 section .ubsct
+start 00001d8c end 00003e56 length  8394 section .debug
 start 0000009e end 0000010b length   109 section .info.
 
 Debug\spi.o:
-start 000085ae end 000086c4 length   278 section .text
-start 00003dd0 end 00005c9d length  7885 section .debug
+start 000085c6 end 000086dc length   278 section .text
+start 00003e56 end 00005d23 length  7885 section .debug
 start 0000010b end 00000177 length   108 section .info.
 
 Debug\stm8s_flash.o:
-start 000086c4 end 00008780 length   188 section .text
-start 00005c9d end 000079cd length  7472 section .debug
+start 000086dc end 00008798 length   188 section .text
+start 00005d23 end 00007a53 length  7472 section .debug
 start 00000177 end 000001eb length   116 section .info.
 start 00008080 end 00008090 length    16 section .const
 
 Debug\sx1276_7_8.o:
-start 00008780 end 00008a0c length   652 section .text
-start 00000017 end 00000075 length    94 section .ubsct
-start 000079cd end 000099a9 length  8156 section .debug
+start 00008798 end 00008a31 length   665 section .text
+start 00000019 end 00000077 length    94 section .ubsct
+start 00007a53 end 00009a2f length  8156 section .debug
 start 000001eb end 0000025e length   115 section .info.
-start 00008090 end 000080be length    46 section .const
+start 00008090 end 000080ca length    58 section .const
 
-(D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)lcmp.o:
-start 00008a0c end 00008a2c length    32 section .text
+(C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)lcmp.o:
+start 00008a31 end 00008a51 length    32 section .text
 start 0000025e end 0000028d length    47 section .info.
 
-(D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)lreg.o:
-start 00000075 end 00000079 length     4 section .ubsct
+(C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)lreg.o:
+start 00000077 end 0000007b length     4 section .ubsct
 start 0000028d end 000002bc length    47 section .info.
 
-(D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)ltor.o:
-start 00008a2c end 00008a3e length    18 section .text
+(C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)ltor.o:
+start 00008a51 end 00008a63 length    18 section .text
 start 000002bc end 000002eb length    47 section .info.
 
-(D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)xreg.o:
-start 00000079 end 0000007c length     3 section .ubsct
+(C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)xreg.o:
+start 0000007b end 0000007e length     3 section .ubsct
 start 000002eb end 0000031a length    47 section .info.
 
-(D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)yreg.o:
-start 0000007c end 0000007f length     3 section .ubsct
+(C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)yreg.o:
+start 0000007e end 00000081 length     3 section .ubsct
 start 0000031a end 00000349 length    47 section .info.
 
 Debug\stm8_interrupt_vector.o:
-start 00008a3e end 00008a65 length    39 section .text
-start 000099a9 end 0000b827 length  7806 section .debug
+start 00008a63 end 00008a8a length    39 section .text
+start 00009a2f end 0000b8ad length  7806 section .debug
 start 00000349 end 000003c7 length   126 section .info.
 start 00008000 end 00008080 length   128 section .const
 
@@ -100,6 +100,7 @@ _ReadData                                9   (5)
 
 Debug\main.o:
 _CLK_Init                                2   (2)
+_FunctionCheck                      >    2   (2)
 _GPIO_Init                               2   (2)
 _InitialMessageMaster                    2   (2)
 _InitialMessageSlave                    10   (2)
@@ -150,146 +151,148 @@ Stack size: 29
                               ---------
    1 > _FLASH_ProgramByte: (7)
 
-   2 > __stext: (0)
+   2 > _FunctionCheck: (2)
 
-   3 > _main: (6)
-   4      + _InitialMessageMaster: (2)
-   5      + _InitialMessageSlave: (2)
-   6      |    + _FLASH_ReadByte: (6)
+   3 > __stext: (0)
+
+   4 > _main: (6)
+   5      + _InitialMessageMaster: (2)
+   6      + _InitialMessageSlave: (2)
+   7      |    + _FLASH_ReadByte: (6)
           | 
-   7      + _ReadDHT11: (4)
-   8      |    + _PulseHighRead: (4)
-   9      |    + _PulseLowRead: (4)
-  10      |    + _ReadData: (5)
-  11      |    |    + _PulseHighRead --> 8
-  12      |    |    + _PulseLowRead --> 9
+   8      + _ReadDHT11: (4)
+   9      |    + _PulseHighRead: (4)
+  10      |    + _PulseLowRead: (4)
+  11      |    + _ReadData: (5)
+  12      |    |    + _PulseHighRead --> 9
+  13      |    |    + _PulseLowRead --> 10
           |    | 
-  13      |    + _delay_ms: (8)
-  14      |    |    + _delay_us: (2)
-          |    | 
-          | 
-  15      + _delay_ms --> 13
-  16      + _mcu_init: (2)
-  17      |    + _CLK_Init: (2)
-  18      |    + _FLASH_DeInit: (2)
-  19      |    + _FLASH_Unlock: (3)
-  20      |    + _GPIO_Init: (2)
-  21      |    + _TIM_Init: (2)
-  22      |    + _delay_ms --> 13
-  23      |    + _power_on_delay: (4)
-  24      |    |    + _delay_ms --> 13
+  14      |    + _delay_ms: (8)
+  15      |    |    + _delay_us: (2)
           |    | 
           | 
-  25      + _sx1278_Config: (3)
-  26      |    + _BurstWrite: (7)
-  27      |    |    + _SPICmd8bit: (4)
+  16      + _delay_ms --> 14
+  17      + _mcu_init: (2)
+  18      |    + _CLK_Init: (2)
+  19      |    + _FLASH_DeInit: (2)
+  20      |    + _FLASH_Unlock: (3)
+  21      |    + _GPIO_Init: (2)
+  22      |    + _TIM_Init: (2)
+  23      |    + _delay_ms --> 14
+  24      |    + _power_on_delay: (4)
+  25      |    |    + _delay_ms --> 14
           |    | 
-  28      |    + _SPIRead: (3)
-  29      |    |    + _SPICmd8bit --> 27
-  30      |    |    + _SPIRead8bit: (4)
+          | 
+  26      + _sx1278_Config: (3)
+  27      |    + _BurstWrite: (7)
+  28      |    |    + _SPICmd8bit: (4)
           |    | 
-  31      |    + _SPIWrite: (4)
-  32      |    |    + _SPICmd8bit --> 27
+  29      |    + _SPIRead: (3)
+  30      |    |    + _SPICmd8bit --> 28
+  31      |    |    + _SPIRead8bit: (4)
           |    | 
-  33      |    + _delay_ms --> 13
-          | 
-  34      + _sx1278_LoRaEntryRx: (3)
-  35      |    + _SPIRead --> 28
-  36      |    + _SPIWrite --> 31
-  37      |    + _sx1278_Config --> 25
-          | 
-  38      + _sx1278_LoRaEntryTx: (3)
-  39      |    + _SPIRead --> 28
-  40      |    + _SPIWrite --> 31
-  41      |    + _sx1278_Config --> 25
-          | 
-  42      + _sx1278_LoRaRxPacket: (3)
-  43      |    + _SPIBurstRead: (7)
-  44      |    |    + _SPICmd8bit --> 27
-  45      |    |    + _SPIRead8bit --> 30
+  32      |    + _SPIWrite: (4)
+  33      |    |    + _SPICmd8bit --> 28
           |    | 
-  46      |    + _SPIRead --> 28
-  47      |    + _SPIWrite --> 31
+  34      |    + _delay_ms --> 14
           | 
-  48      + _sx1278_LoRaTxPacket: (3)
-  49      |    + _BurstWrite --> 26
-  50      |    + _SPIRead --> 28
-  51      |    + _SPIWrite --> 31
+  35      + _sx1278_LoRaEntryRx: (3)
+  36      |    + _SPIRead --> 29
+  37      |    + _SPIWrite --> 32
+  38      |    + _sx1278_Config --> 26
+          | 
+  39      + _sx1278_LoRaEntryTx: (3)
+  40      |    + _SPIRead --> 29
+  41      |    + _SPIWrite --> 32
+  42      |    + _sx1278_Config --> 26
+          | 
+  43      + _sx1278_LoRaRxPacket: (3)
+  44      |    + _SPIBurstRead: (7)
+  45      |    |    + _SPICmd8bit --> 28
+  46      |    |    + _SPIRead8bit --> 31
+          |    | 
+  47      |    + _SPIRead --> 29
+  48      |    + _SPIWrite --> 32
+          | 
+  49      + _sx1278_LoRaTxPacket: (3)
+  50      |    + _BurstWrite --> 27
+  51      |    + _SPIRead --> 29
+  52      |    + _SPIWrite --> 32
           | 
        
-  52 > _sx1278_LoRaReadRSSI: (4)
-  53      + _SPIRead --> 28
+  53 > _sx1278_LoRaReadRSSI: (4)
+  54      + _SPIRead --> 29
        
-  54 > _sx1278_ReadRSSI: (3)
-  55      + _SPIRead --> 28
+  55 > _sx1278_ReadRSSI: (3)
+  56      + _SPIRead --> 29
        
-  56 > f_NonHandledInterrupt: (6)
+  57 > f_NonHandledInterrupt: (6)
 
-  57 > f_PBX_IO_Switch_HandledInterrupt: (6)
+  58 > f_PBX_IO_Switch_HandledInterrupt: (6)
 
-  58 > f_PDX_IO_Switch_HandledInterrupt: (6)
+  59 > f_PDX_IO_Switch_HandledInterrupt: (6)
 
-  59 > f_Timer1_Overflow_HandledInterrupt: (6)
+  60 > f_Timer1_Overflow_HandledInterrupt: (6)
 
-  60 > f_Timer2_Overflow_HandledInterrupt: (6)
+  61 > f_Timer2_Overflow_HandledInterrupt: (6)
 
-  61 > f_Uart1_RX_Data_HandledInterrupt: (6)
+  62 > f_Uart1_RX_Data_HandledInterrupt: (6)
 
-  62 > f_Uart1_TX_Data_HandledInterrupt: (6)
+  63 > f_Uart1_TX_Data_HandledInterrupt: (6)
 
-  63   _BurstWrite --> 26
+  64   _BurstWrite --> 27
 
-  64   _CLK_Init --> 17
+  65   _CLK_Init --> 18
 
-  65   _FLASH_DeInit --> 18
+  66   _FLASH_DeInit --> 19
 
-  66   _FLASH_ReadByte --> 6
+  67   _FLASH_ReadByte --> 7
 
-  67   _FLASH_Unlock --> 19
+  68   _FLASH_Unlock --> 20
 
-  68   _GPIO_Init --> 20
+  69   _GPIO_Init --> 21
 
-  69   _InitialMessageMaster --> 4
+  70   _InitialMessageMaster --> 5
 
-  70   _InitialMessageSlave --> 5
+  71   _InitialMessageSlave --> 6
 
-  71   _PulseHighRead --> 8
+  72   _PulseHighRead --> 9
 
-  72   _PulseLowRead --> 9
+  73   _PulseLowRead --> 10
 
-  73   _ReadDHT11 --> 7
+  74   _ReadDHT11 --> 8
 
-  74   _ReadData --> 10
+  75   _ReadData --> 11
 
-  75   _SPIBurstRead --> 43
+  76   _SPIBurstRead --> 44
 
-  76   _SPICmd8bit --> 27
+  77   _SPICmd8bit --> 28
 
-  77   _SPIRead --> 28
+  78   _SPIRead --> 29
 
-  78   _SPIRead8bit --> 30
+  79   _SPIRead8bit --> 31
 
-  79   _SPIWrite --> 31
+  80   _SPIWrite --> 32
 
-  80   _TIM_Init --> 21
+  81   _TIM_Init --> 22
 
-  81   _delay_ms --> 13
+  82   _delay_ms --> 14
 
-  82   _delay_us --> 14
+  83   _delay_us --> 15
 
-  83   _mcu_init --> 16
+  84   _mcu_init --> 17
 
-  84   _power_on_delay --> 23
+  85   _power_on_delay --> 24
 
-  85   _sx1278_Config --> 25
+  86   _sx1278_Config --> 26
 
-  86   _sx1278_LoRaEntryRx --> 34
+  87   _sx1278_LoRaEntryRx --> 35
 
-  87   _sx1278_LoRaEntryTx --> 38
+  88   _sx1278_LoRaEntryTx --> 39
 
-  88   _sx1278_LoRaRxPacket --> 42
+  89   _sx1278_LoRaRxPacket --> 43
 
-  89   _sx1278_LoRaTxPacket --> 48
+  90   _sx1278_LoRaTxPacket --> 49
 
 
 
@@ -355,7 +358,7 @@ _AWU_TBR                             000050f2   defined in Debug\dht11.o
 _BEEP_CSR                            000050f3   defined in Debug\dht11.o
 _BandWide_Sel                        00000012   defined in Debug\main.o section .ubsct
                                                 used in Debug\sx1276_7_8.o
-_BurstWrite                          00008688   defined in Debug\spi.o section .text
+_BurstWrite                          000086a0   defined in Debug\spi.o section .text
                                                 used in Debug\sx1276_7_8.o
 _CFG_GCR                             00007f60   defined in Debug\dht11.o
 _CLK_CANCCR                          000050cb   defined in Debug\dht11.o
@@ -366,7 +369,7 @@ _CLK_CSSR                            000050c8   defined in Debug\dht11.o
 _CLK_ECKR                            000050c1   defined in Debug\dht11.o
 _CLK_HSITRIMR                        000050cc   defined in Debug\dht11.o
 _CLK_ICKR                            000050c0   defined in Debug\dht11.o
-_CLK_Init                            000083bf   defined in Debug\main.o section .text
+_CLK_Init                            000083d6   defined in Debug\main.o section .text
 _CLK_PCKENR1                         000050c7   defined in Debug\dht11.o
 _CLK_PCKENR2                         000050ca   defined in Debug\dht11.o
 _CLK_SWCR                            000050c5   defined in Debug\dht11.o
@@ -380,22 +383,25 @@ _EXTI_CR2                            000050a1   defined in Debug\dht11.o
 _FLASH_CR1                           0000505a   defined in Debug\dht11.o
 _FLASH_CR2                           0000505b   defined in Debug\dht11.o
 _FLASH_DUKR                          00005064   defined in Debug\dht11.o
-_FLASH_DeInit                        000086e5   defined in Debug\stm8s_flash.o section .text
+_FLASH_DeInit                        000086fd   defined in Debug\stm8s_flash.o section .text
                                                 used in Debug\main.o
 _FLASH_FPR                           0000505d   defined in Debug\dht11.o
 _FLASH_IAPSR                         0000505f   defined in Debug\dht11.o
 _FLASH_NCR2                          0000505c   defined in Debug\dht11.o
 _FLASH_NFPR                          0000505e   defined in Debug\dht11.o
 _FLASH_PUKR                          00005062   defined in Debug\dht11.o
-_FLASH_ProgramByte                   000086fd   defined in Debug\stm8s_flash.o section .text
-_FLASH_ReadByte                      0000873f   defined in Debug\stm8s_flash.o section .text
+_FLASH_ProgramByte                   00008715   defined in Debug\stm8s_flash.o section .text
+_FLASH_ReadByte                      00008757   defined in Debug\stm8s_flash.o section .text
                                                 used in Debug\main.o
-_FLASH_Unlock                        000086c4   defined in Debug\stm8s_flash.o section .text
+_FLASH_Unlock                        000086dc   defined in Debug\stm8s_flash.o section .text
                                                 used in Debug\main.o
-_Freq_Sel                            00000015   defined in Debug\main.o section .ubsct
+_Freq_Sel                            00000017   defined in Debug\main.o section .ubsct
                                                 used in Debug\sx1276_7_8.o
 _Fsk_Rate_Sel                        00000011   defined in Debug\main.o section .ubsct
-_GPIO_Init                           0000835b   defined in Debug\main.o section .text
+_FunctionCheck                       00008595   defined in Debug\main.o section .text
+_GPIO_Init                           00008372   defined in Debug\main.o section .text
+_Gain_Sel                            00000014   defined in Debug\main.o section .ubsct
+                                                used in Debug\sx1276_7_8.o
 _I2C_CCRH                            0000521c   defined in Debug\dht11.o
 _I2C_CCRL                            0000521b   defined in Debug\dht11.o
 _I2C_CR1                             00005210   defined in Debug\dht11.o
@@ -420,18 +426,20 @@ _ITC_SPR7                            00007f76   defined in Debug\dht11.o
 _IWDG_KR                             000050e0   defined in Debug\dht11.o
 _IWDG_PR                             000050e1   defined in Debug\dht11.o
 _IWDG_RLR                            000050e2   defined in Debug\dht11.o
-_InitialMessageMaster                00008533   defined in Debug\main.o section .text
-_InitialMessageSlave                 0000840b   defined in Debug\main.o section .text
+_InitialMessageMaster                0000854a   defined in Debug\main.o section .text
+_InitialMessageSlave                 00008422   defined in Debug\main.o section .text
 _Lora_Rate_Sel                       00000013   defined in Debug\main.o section .ubsct
                                                 used in Debug\sx1276_7_8.o
 _MasterModeFlag                      00000009   defined in Debug\main.o section .ubsct
-_Message                             00000017   defined in Debug\sx1276_7_8.o section .ubsct
+_Message                             00000019   defined in Debug\sx1276_7_8.o section .ubsct
                                                 used in Debug\main.o
 _PA_CR1                              00005003   defined in Debug\dht11.o
 _PA_CR2                              00005004   defined in Debug\dht11.o
 _PA_DDR                              00005002   defined in Debug\dht11.o
 _PA_IDR                              00005001   defined in Debug\dht11.o
 _PA_ODR                              00005000   defined in Debug\dht11.o
+_PA_Over_Current_Sel                 00000015   defined in Debug\main.o section .ubsct
+                                                used in Debug\sx1276_7_8.o
 _PB_CR1                              00005008   defined in Debug\dht11.o
 _PB_CR2                              00005009   defined in Debug\dht11.o
 _PB_DDR                              00005007   defined in Debug\dht11.o
@@ -457,22 +465,22 @@ _PF_CR2                              0000501d   defined in Debug\dht11.o
 _PF_DDR                              0000501b   defined in Debug\dht11.o
 _PF_IDR                              0000501a   defined in Debug\dht11.o
 _PF_ODR                              00005019   defined in Debug\dht11.o
-_Power_Sel                           00000014   defined in Debug\main.o section .ubsct
+_Power_Sel                           00000016   defined in Debug\main.o section .ubsct
                                                 used in Debug\sx1276_7_8.o
-_PulseHighRead                       000081d9   defined in Debug\dht11.o section .text
-_PulseLowRead                        000081fc   defined in Debug\dht11.o section .text
+_PulseHighRead                       000081e5   defined in Debug\dht11.o section .text
+_PulseLowRead                        00008208   defined in Debug\dht11.o section .text
 _RST_SR                              000050b3   defined in Debug\dht11.o
-_ReadDHT11                           0000810c   defined in Debug\dht11.o section .text
+_ReadDHT11                           00008118   defined in Debug\dht11.o section .text
                                                 used in Debug\main.o
-_ReadData                            0000818a   defined in Debug\dht11.o section .text
-_RxData                              00000035   defined in Debug\sx1276_7_8.o section .ubsct
-_SPIBurstRead                        0000864c   defined in Debug\spi.o section .text
+_ReadData                            00008196   defined in Debug\dht11.o section .text
+_RxData                              00000037   defined in Debug\sx1276_7_8.o section .ubsct
+_SPIBurstRead                        00008664   defined in Debug\spi.o section .text
                                                 used in Debug\sx1276_7_8.o
-_SPICmd8bit                          000085ae   defined in Debug\spi.o section .text
-_SPIRead                             00008610   defined in Debug\spi.o section .text
+_SPICmd8bit                          000085c6   defined in Debug\spi.o section .text
+_SPIRead                             00008628   defined in Debug\spi.o section .text
                                                 used in Debug\sx1276_7_8.o
-_SPIRead8bit                         000085da   defined in Debug\spi.o section .text
-_SPIWrite                            0000862e   defined in Debug\spi.o section .text
+_SPIRead8bit                         000085f2   defined in Debug\spi.o section .text
+_SPIWrite                            00008646   defined in Debug\spi.o section .text
                                                 used in Debug\sx1276_7_8.o
 _SPI_CR1                             00005200   defined in Debug\dht11.o
 _SPI_CR2                             00005201   defined in Debug\dht11.o
@@ -558,7 +566,7 @@ _TIM4_EGR                            00005345   defined in Debug\dht11.o
 _TIM4_IER                            00005343   defined in Debug\dht11.o
 _TIM4_PSCR                           00005347   defined in Debug\dht11.o
 _TIM4_SR                             00005344   defined in Debug\dht11.o
-_TIM_Init                            000083e2   defined in Debug\main.o section .text
+_TIM_Init                            000083f9   defined in Debug\main.o section .text
 _UART1_BRR1                          00005232   defined in Debug\dht11.o
 _UART1_BRR2                          00005233   defined in Debug\dht11.o
 _UART1_CR1                           00005234   defined in Debug\dht11.o
@@ -574,65 +582,65 @@ _WWDG_CR                             000050d1   defined in Debug\dht11.o
 _WWDG_WR                             000050d2   defined in Debug\dht11.o
 __endmem                             000001ff   defined in command file
                                                 *** not used ***
-__endzp                              0000007f   defined in command file section .ubsct
-                                                used in D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\crtsi0.sm8
-__idesc__                            000080be   defined in linker section .init
-                                                used in D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\crtsi0.sm8
+__endzp                              00000081   defined in command file section .ubsct
+                                                used in C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\crtsi0.sm8
+__idesc__                            000080ca   defined in linker section .init
+                                                used in C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\crtsi0.sm8
 __memory                             00000100   defined in command file section .bss
-                                                used in D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\crtsi0.sm8
+                                                used in C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\crtsi0.sm8
 __stack                              000003ff   defined in command file
-                                                used in D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\crtsi0.sm8
+                                                used in C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\crtsi0.sm8
 __startmem                           00000100   defined in command file section .bss
                                                 *** not used ***
-__stext                              000080c1   defined in D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\crtsi0.sm8 section .text
+__stext                              000080cd   defined in C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\crtsi0.sm8 section .text
                                                 used in Debug\stm8_interrupt_vector.o
 __vectab                             00008000   defined in Debug\stm8_interrupt_vector.o section .const
-_delay_ms                            0000857e   defined in Debug\main.o section .text
+_delay_ms                            00008596   defined in Debug\main.o section .text
                                                 used in Debug\dht11.o
                                                         Debug\sx1276_7_8.o
-_delay_us                            000085ac   defined in Debug\main.o section .text
-_exit                                0000810a   defined in D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\crtsi0.sm8 section .text
-_main                                0000821f   defined in Debug\main.o section .text
-                                                used in D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\crtsi0.sm8
-_mcu_init                            00008333   defined in Debug\main.o section .text
-_mode                                00000016   defined in Debug\main.o section .ubsct
-_power_on_delay                      000083c8   defined in Debug\main.o section .text
+_delay_us                            000085c4   defined in Debug\main.o section .text
+_exit                                00008116   defined in C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\crtsi0.sm8 section .text
+_main                                0000822b   defined in Debug\main.o section .text
+                                                used in C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\crtsi0.sm8
+_mcu_init                            0000834a   defined in Debug\main.o section .text
+_mode                                00000018   defined in Debug\main.o section .ubsct
+_power_on_delay                      000083df   defined in Debug\main.o section .text
 _rf_rx_packet_length                 0000000c   defined in Debug\main.o section .ubsct
-_sx1278Data                          000080a8   defined in Debug\sx1276_7_8.o section .const
+_sx1278Data                          000080b4   defined in Debug\sx1276_7_8.o section .const
 _sx1278FreqTable                     00008090   defined in Debug\sx1276_7_8.o section .const
-_sx1278LoRaBwTable                   0000809e   defined in Debug\sx1276_7_8.o section .const
+_sx1278LoRaBwTable                   000080aa   defined in Debug\sx1276_7_8.o section .const
 _sx1278PowerTable                    00008093   defined in Debug\sx1276_7_8.o section .const
-_sx1278SpreadFactorTable             00008097   defined in Debug\sx1276_7_8.o section .const
-_sx1278_Config                       0000891e   defined in Debug\sx1276_7_8.o section .text
+_sx1278SpreadFactorTable             000080a3   defined in Debug\sx1276_7_8.o section .const
+_sx1278_Config                       00008936   defined in Debug\sx1276_7_8.o section .text
                                                 used in Debug\main.o
-_sx1278_LoRaEntryRx                  00008780   defined in Debug\sx1276_7_8.o section .text
+_sx1278_LoRaEntryRx                  00008798   defined in Debug\sx1276_7_8.o section .text
                                                 used in Debug\main.o
-_sx1278_LoRaEntryTx                  0000887a   defined in Debug\sx1276_7_8.o section .text
+_sx1278_LoRaEntryTx                  00008892   defined in Debug\sx1276_7_8.o section .text
                                                 used in Debug\main.o
-_sx1278_LoRaReadRSSI                 000087e2   defined in Debug\sx1276_7_8.o section .text
-_sx1278_LoRaRxPacket                 000087f7   defined in Debug\sx1276_7_8.o section .text
+_sx1278_LoRaReadRSSI                 000087fa   defined in Debug\sx1276_7_8.o section .text
+_sx1278_LoRaRxPacket                 0000880f   defined in Debug\sx1276_7_8.o section .text
                                                 used in Debug\main.o
-_sx1278_LoRaTxPacket                 000088d8   defined in Debug\sx1276_7_8.o section .text
+_sx1278_LoRaTxPacket                 000088f0   defined in Debug\sx1276_7_8.o section .text
                                                 used in Debug\main.o
-_sx1278_ReadRSSI                     00008909   defined in Debug\sx1276_7_8.o section .text
+_sx1278_ReadRSSI                     00008921   defined in Debug\sx1276_7_8.o section .text
 _time2_count                         0000000d   defined in Debug\main.o section .ubsct
 _time_flag                           0000000b   defined in Debug\main.o section .ubsct
                                                 used in Debug\stm8_interrupt_vector.o
-c_lcmp                               00008a0c   defined in (D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)lcmp.o section .text
+c_lcmp                               00008a31   defined in (C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)lcmp.o section .text
                                                 used in Debug\stm8s_flash.o
-c_lreg                               00000075   defined in (D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)lreg.o section .ubsct
-                                                used in (D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)lcmp.o
-                                                        (D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)ltor.o
-c_ltor                               00008a2c   defined in (D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)ltor.o section .text
+c_lreg                               00000077   defined in (C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)lreg.o section .ubsct
+                                                used in (C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)lcmp.o
+                                                        (C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)ltor.o
+c_ltor                               00008a51   defined in (C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)ltor.o section .text
                                                 used in Debug\stm8s_flash.o
-c_x                                  00000079   defined in (D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)xreg.o section .ubsct
-                                                used in D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\crtsi0.sm8
-c_y                                  0000007c   defined in (D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)yreg.o section .ubsct
-                                                used in D:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\crtsi0.sm8
-f_NonHandledInterrupt                00008a64   defined in Debug\stm8_interrupt_vector.o section .text
-f_PBX_IO_Switch_HandledInterrupt     00008a3e   defined in Debug\stm8_interrupt_vector.o section .text
-f_PDX_IO_Switch_HandledInterrupt     00008a3f   defined in Debug\stm8_interrupt_vector.o section .text
-f_Timer1_Overflow_HandledInterrupt   00008a40   defined in Debug\stm8_interrupt_vector.o section .text
-f_Timer2_Overflow_HandledInterrupt   00008a61   defined in Debug\stm8_interrupt_vector.o section .text
-f_Uart1_RX_Data_HandledInterrupt     00008a63   defined in Debug\stm8_interrupt_vector.o section .text
-f_Uart1_TX_Data_HandledInterrupt     00008a62   defined in Debug\stm8_interrupt_vector.o section .text
+c_x                                  0000007b   defined in (C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)xreg.o section .ubsct
+                                                used in C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\crtsi0.sm8
+c_y                                  0000007e   defined in (C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\libm0.sm8)yreg.o section .ubsct
+                                                used in C:\Program Files (x86)\COSMIC\CXSTM8_EVAL\lib\crtsi0.sm8
+f_NonHandledInterrupt                00008a89   defined in Debug\stm8_interrupt_vector.o section .text
+f_PBX_IO_Switch_HandledInterrupt     00008a63   defined in Debug\stm8_interrupt_vector.o section .text
+f_PDX_IO_Switch_HandledInterrupt     00008a64   defined in Debug\stm8_interrupt_vector.o section .text
+f_Timer1_Overflow_HandledInterrupt   00008a65   defined in Debug\stm8_interrupt_vector.o section .text
+f_Timer2_Overflow_HandledInterrupt   00008a86   defined in Debug\stm8_interrupt_vector.o section .text
+f_Uart1_RX_Data_HandledInterrupt     00008a88   defined in Debug\stm8_interrupt_vector.o section .text
+f_Uart1_TX_Data_HandledInterrupt     00008a87   defined in Debug\stm8_interrupt_vector.o section .text

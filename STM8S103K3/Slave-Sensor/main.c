@@ -21,6 +21,8 @@ u8 rf_rx_packet_length;
 u8 mode;//lora--1/FSK--0
 u8 Freq_Sel;
 u8 Power_Sel;
+u8 PA_Over_Current_Sel;
+u8 Gain_Sel;
 u8 Lora_Rate_Sel;
 u8 BandWide_Sel;
 u8 Fsk_Rate_Sel;
@@ -61,11 +63,9 @@ void delay_ms(unsigned int ms);
 void delay_us(unsigned int us);
 void InitialMessageSlave(void);
 void InitialMessageMaster(void);
-
-#define Transmit=1;
-#define Receive=0;
-#define WorkingMode=Transmit;
-
+#define EEPower_Sel_Address 0x4000
+#define EEPA_OC_Sel_Address 0x4001
+#define EEGain_Sel_Address	0x4002
 //=====================================
 void main()
 //=====================================
@@ -75,7 +75,19 @@ void main()
 	SystemFlag 			= 0x00;
 	mode 						= 0x01;//lora mode
 	Freq_Sel 				= 0x00;//433M
-	Power_Sel 			= 0x00;//
+	//Forcing EEPROM
+	//FLASH_ProgramByte(EEPA_OC_Sel_Address,11);
+	//FLASH_ProgramByte(EEGain_Sel_Address,1);
+	//PROGRAMMING
+	//Power_Sel 			= FLASH_ReadByte(EEPower_Sel_Address);//PA power 0~15
+	//if(Power_Sel>15)	{	Power_Sel=0; FLASH_ProgramByte(EEPower_Sel_Address,0);}
+	//PA_Over_Current_Sel = FLASH_ReadByte(EEPA_OC_Sel_Address);//100mA 0~15 =>45+(5*Value), 15~37=>(10*Value)-30
+	//if(PA_Over_Current_Sel>37)	{PA_Over_Current_Sel=11; FLASH_ProgramByte(EEPA_OC_Sel_Address,11);}
+	//Gain_Sel				=	FLASH_ReadByte(EEGain_Sel_Address);//1~6, 1 is Max
+	//if(Gain_Sel>6)	{	Gain_Sel=1; FLASH_ProgramByte(EEGain_Sel_Address,1);}
+	Power_Sel 			= 0;//PA power 0~15
+	PA_Over_Current_Sel = 11;
+	Gain_Sel				=	1;
 	Lora_Rate_Sel 	= 0x06;//
 	BandWide_Sel 		= 0x07;
 	Fsk_Rate_Sel 		= 0x00;
@@ -94,6 +106,7 @@ void main()
 	RED_LED_H();
 	sx1278_Config();
   sx1278_LoRaEntryRx();
+	InitialMessageSlave();
 	TIM1_CR1 |= 0x01;			//enable time1
 	MasterModeFlag=0;	
 while(1)
@@ -335,6 +348,21 @@ void InitialMessageMaster(void)
 	Message[28]=0;
 	Message[29]=0;	
 }	
+
+//=====================================
+u8 FunctionCheck(void)
+//=====================================
+//Function
+#define Broadcast		1
+#define EERead			2
+#define EEWrite			3
+#define StructRead	4
+#define StructWrite 5
+#define ResetSYS		6
+{
+	
+}
+
 
 //=====================================
 void delay_ms(unsigned int ms)

@@ -21,12 +21,14 @@
 //  Rx Current:          about 11.5mA  (typ.)       
 **********************************************************/
 //Table
-const u8 sx1278FreqTable[1][3] 			= {{0x85, 0x3b, 0x13},};		//433MHz with 26MHz crystal	
-const u8 sx1278PowerTable[4] 				= {0xFF,0xFC,0xF9,0xF6};    //20dbm,17dbm,14dbm,11dbm 
+const u8 sx1278FreqTable[1][3]= {{0x85, 0x3b, 0x13},};		//433MHz with 26MHz crystal	
+const u8 sx1278PowerTable[16]	= {0xF0,0xF1,0xF2,0xF3,0xF4,0xF5,0xF6,0xF7,0xF8,0xF9,0xFA,0xFB,0xFC,0xFD,0xFE,0xFF};    //FF=20dbm,FC=17dbm,F9=14dbm,F6=11dbm 
 const u8 sx1278SpreadFactorTable[7] =	{6,7,8,9,10,11,12};
-const u8 sx1278LoRaBwTable[10] 			=	{0,1,2,3,4,5,6,7,8,9};		//7.8KHz,10.4KHz,15.6KHz,20.8KHz,31.2KHz,41.7KHz,62.5KHz,125KHz,250KHz,500KHz
+const u8 sx1278LoRaBwTable[10] 			=	{0,1,2,3,4,5,6,7,8,9};	//7.8KHz,10.4KHz,15.6KHz,20.8KHz,31.2KHz,41.7KHz,62.5KHz,125KHz,250KHz,500KHz
 const u8 sx1278Data[] 							= {"**Exosite LoRa Demo**"};
-u8 Message[30];
+#define PayloadLengthValue	30
+#define HeadLengthValue			7		//EXOSITE
+u8 Message[PayloadLengthValue];
 u8 RxData[64];
 
 #define LoRa_Standby_Value	0x09
@@ -49,7 +51,7 @@ u8 sx1278_LoRaEntryRx(void)
   SPIWrite(REG_LR_DIOMAPPING1,0x01);              //DIO0=00, DIO1=00, DIO2=00, DIO3=01 Valid header      
   SPIWrite(LR_RegIrqFlagsMask,0x3F);              //Open RxDone interrupt & Timeout
   SPIWrite(LR_RegIrqFlags,LoRa_ClearIRQ_Value);     
-  SPIWrite(LR_RegPayloadLength,30);               //RegPayloadLength  30byte(this register must difine when the data long of one byte in SF is 6)
+  SPIWrite(LR_RegPayloadLength,PayloadLengthValue);               //RegPayloadLength  30byte(this register must difine when the data long of one byte in SF is 6)
   addr = SPIRead(LR_RegFifoRxBaseAddr);           //Read RxBaseAddr
   SPIWrite(LR_RegFifoAddrPtr,addr);               //RxBaseAddr -> FiFoAddrPtr¡¡ 
   SPIWrite(LR_RegOpMode,0x8d);                    //Continuous Rx Mode//Low Frequency Mode
@@ -88,17 +90,17 @@ u8 sx1278_LoRaRxPacket(void)
     addr = SPIRead(LR_RegFifoRxCurrentaddr);      //last packet addr
     SPIWrite(LR_RegFifoAddrPtr,addr);             //RxBaseAddr -> FiFoAddrPtr    
     if(sx1278SpreadFactorTable[Lora_Rate_Sel]==6)	//When SpreadFactor is six£¬will used Implicit Header mode(Excluding internal packet length)
-      packet_size=30;
+      packet_size=PayloadLengthValue;
     else
       packet_size = SPIRead(LR_RegRxNbBytes);     //Number for received bytes    
     SPIBurstRead(0x00, RxData, packet_size);    
     SPIWrite(LR_RegIrqFlags,LoRa_ClearIRQ_Value);	//Word "EXOSITE" received?
-    for(i=0;i<7;i++)
+    for(i=0;i<(HeadLengthValue-1);i++)
     {
       if(RxData[i]!=Message[i])
         break;  
     }    
-    if(i>=7)                                     //Rx success
+    if(i>=(HeadLengthValue-1))                    //Rx success
       return(1);
     else
       return(0);
@@ -120,14 +122,14 @@ u8 sx1278_LoRaEntryTx(void)
   SPIWrite(REG_LR_DIOMAPPING1,0x41);              //DIO0=01, DIO1=00, DIO2=00, DIO3=01  
   SPIWrite(LR_RegIrqFlags,LoRa_ClearIRQ_Value);
   SPIWrite(LR_RegIrqFlagsMask,0xF7);              //Open TxDone interrupt
-  SPIWrite(LR_RegPayloadLength,30);               //RegPayloadLength  30byte  
+  SPIWrite(LR_RegPayloadLength,PayloadLengthValue);               //RegPayloadLength  30byte  
   addr = SPIRead(LR_RegFifoTxBaseAddr);           //RegFiFoTxBaseAddr
   SPIWrite(LR_RegFifoAddrPtr,addr);               //RegFifoAddrPtr
 	SysTime = 0;
 	while(1)
 	{
 		temp=SPIRead(LR_RegPayloadLength);
-		if(temp==30)
+		if(temp==PayloadLengthValue)
 		{
 			break; 
 		}
@@ -143,8 +145,8 @@ u8 sx1278_LoRaTxPacket(void)
   u8 TxFlag=0;
   u8 addr;
   
-	//BurstWrite(0x00, (u8 *)sx1278Data, 30);
-	BurstWrite(0x00, Message, 30);
+	//BurstWrite(0x00, (u8 *)sx1278Data, PayloadLengthValue);
+	BurstWrite(0x00, Message, PayloadLengthValue);
 	SPIWrite(LR_RegOpMode,0x8b);                    	//Tx Mode           
 	while(1)
 	{
@@ -185,8 +187,8 @@ void sx1278_Config(void)
 
 	//setting base parameter 
 	SPIWrite(LR_RegPaConfig,sx1278PowerTable[Power_Sel]); //Setting output power parameter  
-	SPIWrite(LR_RegOcp,0x0B);                              	//RegOcp,Close Ocp
-	SPIWrite(LR_RegLna,0x23);                              	//RegLNA,High & LNA Enable
+	SPIWrite(LR_RegOcp,(PA_Over_Current_Sel|0b00100000));            //Protect PA 100mA
+	SPIWrite(LR_RegLna,(Gain_Sel<<5));                       //Gain G1
 	if(sx1278SpreadFactorTable[Lora_Rate_Sel]==6)         //SFactor=6
 	{
 		u8 tmp;
