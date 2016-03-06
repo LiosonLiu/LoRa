@@ -58,6 +58,8 @@ void CLK_Init(void);
 void power_on_delay(void); //Power on delay
 void TIM_Init(void);
 void power_on_config_read(void);
+void InitialRAM(void);
+void Test(void);
 /******delay*************/
 void delay_ms(unsigned int ms);
 void delay_us(unsigned int us);
@@ -71,27 +73,7 @@ void main()
 //=====================================
 {
 	u16 i,j,k=0,g;
-	SysTime 				= 0;
-	SystemFlag 			= 0x00;
-	mode 						= 0x01;//lora mode
-	Freq_Sel 				= 0x00;//433M
-	//Forcing EEPROM
-	//FLASH_ProgramByte(EEPA_OC_Sel_Address,11);
-	//FLASH_ProgramByte(EEGain_Sel_Address,1);
-	//PROGRAMMING
-	//Power_Sel 			= FLASH_ReadByte(EEPower_Sel_Address);//PA power 0~15
-	//if(Power_Sel>15)	{	Power_Sel=0; FLASH_ProgramByte(EEPower_Sel_Address,0);}
-	//PA_Over_Current_Sel = FLASH_ReadByte(EEPA_OC_Sel_Address);//100mA 0~15 =>45+(5*Value), 15~37=>(10*Value)-30
-	//if(PA_Over_Current_Sel>37)	{PA_Over_Current_Sel=11; FLASH_ProgramByte(EEPA_OC_Sel_Address,11);}
-	//Gain_Sel				=	FLASH_ReadByte(EEGain_Sel_Address);//1~6, 1 is Max
-	//if(Gain_Sel>6)	{	Gain_Sel=1; FLASH_ProgramByte(EEGain_Sel_Address,1);}
-	Power_Sel 			= 0;//PA power 0~15
-	PA_Over_Current_Sel = 11;
-	Gain_Sel				=	1;
-	Lora_Rate_Sel 	= 0x06;//
-	BandWide_Sel 		= 0x07;
-	Fsk_Rate_Sel 		= 0x00;
-	
+	InitialRAM();	
 	_asm("sim");               //Disable interrupts.
 	mcu_init();
 	ITC_SPR4 = 0xf3;//time2 interrupt priority 2¡¢level13
@@ -124,10 +106,10 @@ while(1)
 			GREEN_LED_L();
 			delay_ms(100);
 			GREEN_LED_H();
-			RED_LED_L();
-			sx1278_LoRaEntryTx();
+			//RED_LED_L();
+			sx1278_LoRaEntryTx();			
 			sx1278_LoRaTxPacket();
-			RED_LED_H();
+			//RED_LED_H();			
 			sx1278_LoRaEntryRx();
 			}
 		ReadDHT11();			//Read Temperature & Humidity
@@ -147,9 +129,9 @@ while(1)
 				{
 				time_flag=0;
 				RED_LED_L();
-				sx1278_LoRaEntryTx();
+				sx1278_LoRaEntryTx();			
 				sx1278_LoRaTxPacket();
-				RED_LED_H();
+				RED_LED_H();					
 				MasterModeFlag++;
 				}
 				break;
@@ -348,7 +330,11 @@ void InitialMessageMaster(void)
 	Message[28]=0;
 	Message[29]=0;	
 }	
-
+//=====================================
+void Encryption(void)
+//=====================================
+{
+}
 //=====================================
 u8 FunctionCheck(void)
 //=====================================
@@ -358,7 +344,11 @@ u8 FunctionCheck(void)
 #define EEWrite			3
 #define StructRead	4
 #define StructWrite 5
-#define ResetSYS		6
+#define IOWrite			6
+#define IORead			7
+#define SleepOption	8
+#define PWS					9
+#define ResetSYS		10
 {
 	
 }
@@ -385,3 +375,48 @@ void delay_us(unsigned int us)
 {
 	NOP();
 }
+//=====================================
+void InitialRAM(void)
+//=====================================
+{
+	u8 action=0x00;
+	SysTime 				= 0;
+	SystemFlag 			= 0x00;
+	mode 						= 0x01;//lora mode
+	Freq_Sel 				= 0x00;//433M
+	FLASH_Unlock(FLASH_MEMTYPE_DATA);
+	Gain_Sel				=	FLASH_ReadByte(EEGain_Sel_Address);//1~6, 1 is Max
+	if(Gain_Sel==0)	//0 & 0xff  mean first time run
+		action=0xff;
+	if(Gain_Sel>6)
+		action=0xff;
+	if(action!=0)
+		{
+		Gain_Sel=1; 
+		PA_Over_Current_Sel=11; 
+		Power_Sel=0;		
+		FLASH_ProgramByte(EEGain_Sel_Address,Gain_Sel);
+		FLASH_ProgramByte(EEPA_OC_Sel_Address,PA_Over_Current_Sel); 
+		FLASH_ProgramByte(EEPower_Sel_Address,Power_Sel);
+		}
+	else
+		{
+		Power_Sel 		= FLASH_ReadByte(EEPower_Sel_Address);//PA power 0~15
+		PA_Over_Current_Sel = FLASH_ReadByte(EEPA_OC_Sel_Address);//100mA 0~15 =>45+(5*Value), 15~37=>(10*Value)-30
+		}
+
+	Lora_Rate_Sel 	= 0x06;//
+	BandWide_Sel 		= 0x07;
+	Fsk_Rate_Sel 		= 0x00;	
+}
+//=====================================
+void Test(void)
+//=====================================
+{
+	FLASH_Unlock(FLASH_MEMTYPE_DATA);
+	FLASH_ProgramByte(EEPA_OC_Sel_Address,11);
+}
+
+
+
+

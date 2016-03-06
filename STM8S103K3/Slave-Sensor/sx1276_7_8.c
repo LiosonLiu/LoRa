@@ -148,6 +148,7 @@ u8 sx1278_LoRaTxPacket(void)
 	//BurstWrite(0x00, (u8 *)sx1278Data, PayloadLengthValue);
 	BurstWrite(0x00, Message, PayloadLengthValue);
 	SPIWrite(LR_RegOpMode,0x8b);                    	//Tx Mode           
+RED_LED_L();
 	while(1)
 	{
 		if(Get_NIRQ())                      						//Packet send over
@@ -158,6 +159,7 @@ u8 sx1278_LoRaTxPacket(void)
 			break;
 		}
 	} 
+	RED_LED_H();
 }
 
 //=====================================

@@ -57,7 +57,7 @@
 2646                     ; 47 	ANT_CTRL_RX();        
 2648  0005 7214500a      	bset	_PC_ODR,#2
 2649                     ; 48   sx1278_Config();                            //setting base parameter
-2651  0009 cd019e        	call	_sx1278_Config
+2651  0009 cd01a6        	call	_sx1278_Config
 2653                     ; 49   SPIWrite(REG_LR_PADAC,0x84);                    //Normal and Rx
 2655  000c ae4d84        	ldw	x,#19844
 2656  000f cd0000        	call	_SPIWrite
@@ -243,7 +243,7 @@
 3048  00fa 88            	push	a
 3049       00000001      OFST:	set	1
 3052                     ; 117   sx1278_Config();                            //setting base parameter
-3054  00fb cd019e        	call	_sx1278_Config
+3054  00fb cd01a6        	call	_sx1278_Config
 3056                     ; 118   ANT_EN_H();
 3058  00fe 721c5005      	bset	_PB_ODR,#6
 3059                     ; 119 	ANT_CTRL_TX();    
@@ -301,263 +301,267 @@
 3136  0154 4f            	clr	a
 3139  0155 5b01          	addw	sp,#1
 3140  0157 81            	ret
-3180                     ; 142 u8 sx1278_LoRaTxPacket(void)
-3180                     ; 143 //=====================================
-3180                     ; 144 { 
-3181                     	switch	.text
-3182  0158               _sx1278_LoRaTxPacket:
-3184  0158 88            	push	a
-3185       00000001      OFST:	set	1
-3188                     ; 145   u8 TxFlag=0;
-3190  0159 0f01          	clr	(OFST+0,sp)
-3191                     ; 149 	BurstWrite(0x00, Message, PayloadLengthValue);
-3193  015b 4b1e          	push	#30
-3194  015d ae0000        	ldw	x,#_Message
-3195  0160 89            	pushw	x
-3196  0161 4f            	clr	a
-3197  0162 cd0000        	call	_BurstWrite
-3199  0165 5b03          	addw	sp,#3
-3200                     ; 150 	SPIWrite(LR_RegOpMode,0x8b);                    	//Tx Mode           
-3202  0167 ae018b        	ldw	x,#395
-3203  016a cd0000        	call	_SPIWrite
-3205  016d               L5302:
-3206                     ; 153 		if(Get_NIRQ())                      						//Packet send over
-3208  016d c65010        	ld	a,_PD_IDR
-3209  0170 a408          	and	a,#8
-3210  0172 a108          	cp	a,#8
-3211  0174 26f7          	jrne	L5302
-3212                     ; 155 			SPIRead(LR_RegIrqFlags);
-3214  0176 a612          	ld	a,#18
-3215  0178 cd0000        	call	_SPIRead
-3217                     ; 156 			SPIWrite(LR_RegIrqFlags,LoRa_ClearIRQ_Value);	//Clear irq				
-3219  017b ae12ff        	ldw	x,#4863
-3220  017e cd0000        	call	_SPIWrite
-3222                     ; 157 			SPIWrite(LR_RegOpMode,LoRa_Standby_Value);    //Entry Standby mode   
-3224  0181 ae0109        	ldw	x,#265
-3225  0184 cd0000        	call	_SPIWrite
-3227                     ; 158 			break;
-3228                     ; 161 }
-3231  0187 84            	pop	a
-3232  0188 81            	ret
-3267                     ; 164 u8 sx1278_ReadRSSI(void)
-3267                     ; 165 //=====================================
-3267                     ; 166 {
-3268                     	switch	.text
-3269  0189               _sx1278_ReadRSSI:
-3271  0189 88            	push	a
-3272       00000001      OFST:	set	1
-3275                     ; 167   u8 temp=0xff;	
-3277                     ; 168   temp=SPIRead(0x11);
-3279  018a a611          	ld	a,#17
-3280  018c cd0000        	call	_SPIRead
-3282  018f 6b01          	ld	(OFST+0,sp),a
-3283                     ; 169   temp>>=1;
-3285  0191 0401          	srl	(OFST+0,sp)
-3286                     ; 170   temp=127-temp;		                     					//127:Max RSSI
-3288  0193 a67f          	ld	a,#127
-3289  0195 1001          	sub	a,(OFST+0,sp)
-3290  0197 6b01          	ld	(OFST+0,sp),a
-3291                     ; 171   return temp;
-3293  0199 7b01          	ld	a,(OFST+0,sp)
-3296  019b 5b01          	addw	sp,#1
-3297  019d 81            	ret
-3355                     ; 175 void sx1278_Config(void)
-3355                     ; 176 //=====================================
-3355                     ; 177 {
-3356                     	switch	.text
-3357  019e               _sx1278_Config:
-3359  019e 88            	push	a
-3360       00000001      OFST:	set	1
-3363                     ; 179   SPIWrite(LR_RegOpMode,LoRa_Sleep_Value);   			//Change modem mode Must in Sleep mode 
-3365  019f ae0108        	ldw	x,#264
-3366  01a2 cd0000        	call	_SPIWrite
-3368                     ; 180   for(i=250;i!=0;i--)                             //Delay
-3370  01a5 a6fa          	ld	a,#250
-3371  01a7 6b01          	ld	(OFST+0,sp),a
-3372  01a9               L3012:
-3373                     ; 181     NOP();
-3376  01a9 9d            nop
-3378                     ; 180   for(i=250;i!=0;i--)                             //Delay
-3380  01aa 0a01          	dec	(OFST+0,sp)
-3383  01ac 0d01          	tnz	(OFST+0,sp)
-3384  01ae 26f9          	jrne	L3012
-3385                     ; 182 	delay_ms(15);
-3388  01b0 ae000f        	ldw	x,#15
-3389  01b3 cd0000        	call	_delay_ms
-3391                     ; 185 	SPIWrite(LR_RegOpMode,LoRa_Entry_Value);     
-3393  01b6 ae0188        	ldw	x,#392
-3394  01b9 cd0000        	call	_SPIWrite
-3396                     ; 186 	BurstWrite(LR_RegFrMsb,sx1278FreqTable[Freq_Sel],3);  //setting frequency parameter
-3398  01bc 4b03          	push	#3
-3399  01be b600          	ld	a,_Freq_Sel
-3400  01c0 97            	ld	xl,a
-3401  01c1 a603          	ld	a,#3
-3402  01c3 42            	mul	x,a
-3403  01c4 1c0000        	addw	x,#_sx1278FreqTable
-3404  01c7 89            	pushw	x
-3405  01c8 a606          	ld	a,#6
-3406  01ca cd0000        	call	_BurstWrite
-3408  01cd 5b03          	addw	sp,#3
-3409                     ; 189 	SPIWrite(LR_RegPaConfig,sx1278PowerTable[Power_Sel]); //Setting output power parameter  
-3411  01cf b600          	ld	a,_Power_Sel
-3412  01d1 5f            	clrw	x
-3413  01d2 97            	ld	xl,a
-3414  01d3 d60003        	ld	a,(_sx1278PowerTable,x)
-3415  01d6 97            	ld	xl,a
-3416  01d7 a609          	ld	a,#9
-3417  01d9 95            	ld	xh,a
-3418  01da cd0000        	call	_SPIWrite
-3420                     ; 190 	SPIWrite(LR_RegOcp,(PA_Over_Current_Sel|0b00100000));            //Protect PA 100mA
-3422  01dd b600          	ld	a,_PA_Over_Current_Sel
-3423  01df aa20          	or	a,#32
-3424  01e1 97            	ld	xl,a
-3425  01e2 a60b          	ld	a,#11
-3426  01e4 95            	ld	xh,a
-3427  01e5 cd0000        	call	_SPIWrite
-3429                     ; 191 	SPIWrite(LR_RegLna,(Gain_Sel<<5));                       //Gain G1
-3431  01e8 b600          	ld	a,_Gain_Sel
-3432  01ea 97            	ld	xl,a
-3433  01eb a620          	ld	a,#32
-3434  01ed 42            	mul	x,a
-3435  01ee 9f            	ld	a,xl
-3436  01ef 97            	ld	xl,a
-3437  01f0 a60c          	ld	a,#12
-3438  01f2 95            	ld	xh,a
-3439  01f3 cd0000        	call	_SPIWrite
-3441                     ; 192 	if(sx1278SpreadFactorTable[Lora_Rate_Sel]==6)         //SFactor=6
-3443  01f6 b600          	ld	a,_Lora_Rate_Sel
-3444  01f8 5f            	clrw	x
-3445  01f9 97            	ld	xl,a
-3446  01fa d60013        	ld	a,(_sx1278SpreadFactorTable,x)
-3447  01fd a106          	cp	a,#6
-3448  01ff 264e          	jrne	L1112
-3449                     ; 195 		SPIWrite(LR_RegModemConfig1,((sx1278LoRaBwTable[BandWide_Sel]<<4)+(CR<<1)+0x01));//Implicit Enable CRC Enable(0x02) & Error Coding rate 4/5(0x01), 4/6(0x02), 4/7(0x03), 4/8(0x04)
-3451  0201 b600          	ld	a,_BandWide_Sel
-3452  0203 5f            	clrw	x
-3453  0204 97            	ld	xl,a
-3454  0205 d6001a        	ld	a,(_sx1278LoRaBwTable,x)
-3455  0208 97            	ld	xl,a
-3456  0209 a610          	ld	a,#16
-3457  020b 42            	mul	x,a
-3458  020c 9f            	ld	a,xl
-3459  020d ab03          	add	a,#3
-3460  020f 97            	ld	xl,a
-3461  0210 a61d          	ld	a,#29
-3462  0212 95            	ld	xh,a
-3463  0213 cd0000        	call	_SPIWrite
-3465                     ; 196 		SPIWrite(LR_RegModemConfig2,((sx1278SpreadFactorTable[Lora_Rate_Sel]<<4)+(CRC<<2)+0x03));
-3467  0216 b600          	ld	a,_Lora_Rate_Sel
-3468  0218 5f            	clrw	x
-3469  0219 97            	ld	xl,a
-3470  021a d60013        	ld	a,(_sx1278SpreadFactorTable,x)
-3471  021d 97            	ld	xl,a
-3472  021e a610          	ld	a,#16
-3473  0220 42            	mul	x,a
-3474  0221 9f            	ld	a,xl
-3475  0222 ab07          	add	a,#7
-3476  0224 97            	ld	xl,a
-3477  0225 a61e          	ld	a,#30
-3478  0227 95            	ld	xh,a
-3479  0228 cd0000        	call	_SPIWrite
-3481                     ; 197 		tmp = SPIRead(0x31);
-3483  022b a631          	ld	a,#49
-3484  022d cd0000        	call	_SPIRead
-3486  0230 6b01          	ld	(OFST+0,sp),a
-3487                     ; 198 		tmp &= 0xF8;
-3489  0232 7b01          	ld	a,(OFST+0,sp)
-3490  0234 a4f8          	and	a,#248
-3491  0236 6b01          	ld	(OFST+0,sp),a
-3492                     ; 199 		tmp |= 0x05;
-3494  0238 7b01          	ld	a,(OFST+0,sp)
-3495  023a aa05          	or	a,#5
-3496  023c 6b01          	ld	(OFST+0,sp),a
-3497                     ; 200 		SPIWrite(0x31,tmp);
-3499  023e 7b01          	ld	a,(OFST+0,sp)
-3500  0240 97            	ld	xl,a
-3501  0241 a631          	ld	a,#49
-3502  0243 95            	ld	xh,a
-3503  0244 cd0000        	call	_SPIWrite
-3505                     ; 201 		SPIWrite(0x37,0x0C);
-3507  0247 ae370c        	ldw	x,#14092
-3508  024a cd0000        	call	_SPIWrite
-3511  024d 202a          	jra	L3112
-3512  024f               L1112:
-3513                     ; 205 		SPIWrite(LR_RegModemConfig1,((sx1278LoRaBwTable[BandWide_Sel]<<4)+(CR<<1)+0x00));//Explicit Enable CRC Enable(0x02) & Error Coding rate 4/5(0x01), 4/6(0x02), 4/7(0x03), 4/8(0x04)
-3515  024f b600          	ld	a,_BandWide_Sel
-3516  0251 5f            	clrw	x
-3517  0252 97            	ld	xl,a
-3518  0253 d6001a        	ld	a,(_sx1278LoRaBwTable,x)
-3519  0256 97            	ld	xl,a
-3520  0257 a610          	ld	a,#16
-3521  0259 42            	mul	x,a
-3522  025a 9f            	ld	a,xl
-3523  025b ab02          	add	a,#2
-3524  025d 97            	ld	xl,a
-3525  025e a61d          	ld	a,#29
-3526  0260 95            	ld	xh,a
-3527  0261 cd0000        	call	_SPIWrite
-3529                     ; 206 		SPIWrite(LR_RegModemConfig2,((sx1278SpreadFactorTable[Lora_Rate_Sel]<<4)+(CRC<<2)+0x03));  //SFactor &  LNA gain set by the internal AGC loop 
-3531  0264 b600          	ld	a,_Lora_Rate_Sel
-3532  0266 5f            	clrw	x
-3533  0267 97            	ld	xl,a
-3534  0268 d60013        	ld	a,(_sx1278SpreadFactorTable,x)
-3535  026b 97            	ld	xl,a
-3536  026c a610          	ld	a,#16
-3537  026e 42            	mul	x,a
-3538  026f 9f            	ld	a,xl
-3539  0270 ab07          	add	a,#7
-3540  0272 97            	ld	xl,a
-3541  0273 a61e          	ld	a,#30
-3542  0275 95            	ld	xh,a
-3543  0276 cd0000        	call	_SPIWrite
-3545  0279               L3112:
-3546                     ; 208 	SPIWrite(LR_RegSymbTimeoutLsb,0xFF);                  //RegSymbTimeoutLsb Timeout = 0x3FF(Max)    
-3548  0279 ae1fff        	ldw	x,#8191
-3549  027c cd0000        	call	_SPIWrite
-3551                     ; 209 	SPIWrite(LR_RegPreambleMsb,0x00);                     //RegPreambleMsb 
-3553  027f ae2000        	ldw	x,#8192
-3554  0282 cd0000        	call	_SPIWrite
-3556                     ; 210 	SPIWrite(LR_RegPreambleLsb,12);                      	//RegPreambleLsb 8+4=12byte Preamble    
-3558  0285 ae210c        	ldw	x,#8460
-3559  0288 cd0000        	call	_SPIWrite
-3561                     ; 211 	SPIWrite(REG_LR_DIOMAPPING2,0x01);                    //RegDioMapping2 DIO5=00, DIO4=01	
-3563  028b ae4101        	ldw	x,#16641
-3564  028e cd0000        	call	_SPIWrite
-3566                     ; 212   SPIWrite(LR_RegOpMode,LoRa_Standby_Value);            //Entry standby mode
-3568  0291 ae0109        	ldw	x,#265
-3569  0294 cd0000        	call	_SPIWrite
-3571                     ; 213 }
-3574  0297 84            	pop	a
-3575  0298 81            	ret
-3662                     	xdef	_sx1278_ReadRSSI
-3663                     	xdef	_sx1278Data
-3664                     	xdef	_sx1278LoRaBwTable
-3665                     	xdef	_sx1278SpreadFactorTable
-3666                     	xdef	_sx1278PowerTable
-3667                     	xdef	_sx1278FreqTable
-3668                     	xdef	_sx1278_LoRaTxPacket
-3669                     	xdef	_sx1278_LoRaEntryTx
-3670                     	xdef	_sx1278_LoRaRxPacket
-3671                     	xdef	_sx1278_LoRaReadRSSI
-3672                     	xdef	_sx1278_LoRaEntryRx
-3673                     	xdef	_sx1278_Config
-3674                     	switch	.ubsct
-3675  0000               _Message:
-3676  0000 000000000000  	ds.b	30
-3677                     	xdef	_Message
-3678  001e               _RxData:
-3679  001e 000000000000  	ds.b	64
-3680                     	xdef	_RxData
-3681                     	xref	_delay_ms
-3682                     	xref.b	_SysTime
-3683                     	xref.b	_BandWide_Sel
-3684                     	xref.b	_Lora_Rate_Sel
-3685                     	xref.b	_Gain_Sel
-3686                     	xref.b	_PA_Over_Current_Sel
-3687                     	xref.b	_Power_Sel
-3688                     	xref.b	_Freq_Sel
-3689                     	xref	_BurstWrite
-3690                     	xref	_SPIBurstRead
-3691                     	xref	_SPIWrite
-3692                     	xref	_SPIRead
-3712                     	end
+3181                     ; 142 u8 sx1278_LoRaTxPacket(void)
+3181                     ; 143 //=====================================
+3181                     ; 144 { 
+3182                     	switch	.text
+3183  0158               _sx1278_LoRaTxPacket:
+3185  0158 88            	push	a
+3186       00000001      OFST:	set	1
+3189                     ; 145   u8 TxFlag=0;
+3191  0159 0f01          	clr	(OFST+0,sp)
+3192                     ; 149 	BurstWrite(0x00, Message, PayloadLengthValue);
+3194  015b 4b1e          	push	#30
+3195  015d ae0000        	ldw	x,#_Message
+3196  0160 89            	pushw	x
+3197  0161 4f            	clr	a
+3198  0162 cd0000        	call	_BurstWrite
+3200  0165 5b03          	addw	sp,#3
+3201                     ; 150 	SPIWrite(LR_RegOpMode,0x8b);                    	//Tx Mode           
+3203  0167 ae018b        	ldw	x,#395
+3204  016a cd0000        	call	_SPIWrite
+3206                     ; 151 RED_LED_L();
+3208  016d 72115005      	bres	_PB_ODR,#0
+3209  0171               L5302:
+3210                     ; 154 		if(Get_NIRQ())                      						//Packet send over
+3212  0171 c65010        	ld	a,_PD_IDR
+3213  0174 a408          	and	a,#8
+3214  0176 a108          	cp	a,#8
+3215  0178 26f7          	jrne	L5302
+3216                     ; 156 			SPIRead(LR_RegIrqFlags);
+3218  017a a612          	ld	a,#18
+3219  017c cd0000        	call	_SPIRead
+3221                     ; 157 			SPIWrite(LR_RegIrqFlags,LoRa_ClearIRQ_Value);	//Clear irq				
+3223  017f ae12ff        	ldw	x,#4863
+3224  0182 cd0000        	call	_SPIWrite
+3226                     ; 158 			SPIWrite(LR_RegOpMode,LoRa_Standby_Value);    //Entry Standby mode   
+3228  0185 ae0109        	ldw	x,#265
+3229  0188 cd0000        	call	_SPIWrite
+3231                     ; 159 			break;
+3232                     ; 162 	RED_LED_H();
+3234  018b 72105005      	bset	_PB_ODR,#0
+3235                     ; 163 }
+3238  018f 84            	pop	a
+3239  0190 81            	ret
+3274                     ; 166 u8 sx1278_ReadRSSI(void)
+3274                     ; 167 //=====================================
+3274                     ; 168 {
+3275                     	switch	.text
+3276  0191               _sx1278_ReadRSSI:
+3278  0191 88            	push	a
+3279       00000001      OFST:	set	1
+3282                     ; 169   u8 temp=0xff;	
+3284                     ; 170   temp=SPIRead(0x11);
+3286  0192 a611          	ld	a,#17
+3287  0194 cd0000        	call	_SPIRead
+3289  0197 6b01          	ld	(OFST+0,sp),a
+3290                     ; 171   temp>>=1;
+3292  0199 0401          	srl	(OFST+0,sp)
+3293                     ; 172   temp=127-temp;		                     					//127:Max RSSI
+3295  019b a67f          	ld	a,#127
+3296  019d 1001          	sub	a,(OFST+0,sp)
+3297  019f 6b01          	ld	(OFST+0,sp),a
+3298                     ; 173   return temp;
+3300  01a1 7b01          	ld	a,(OFST+0,sp)
+3303  01a3 5b01          	addw	sp,#1
+3304  01a5 81            	ret
+3362                     ; 177 void sx1278_Config(void)
+3362                     ; 178 //=====================================
+3362                     ; 179 {
+3363                     	switch	.text
+3364  01a6               _sx1278_Config:
+3366  01a6 88            	push	a
+3367       00000001      OFST:	set	1
+3370                     ; 181   SPIWrite(LR_RegOpMode,LoRa_Sleep_Value);   			//Change modem mode Must in Sleep mode 
+3372  01a7 ae0108        	ldw	x,#264
+3373  01aa cd0000        	call	_SPIWrite
+3375                     ; 182   for(i=250;i!=0;i--)                             //Delay
+3377  01ad a6fa          	ld	a,#250
+3378  01af 6b01          	ld	(OFST+0,sp),a
+3379  01b1               L3012:
+3380                     ; 183     NOP();
+3383  01b1 9d            nop
+3385                     ; 182   for(i=250;i!=0;i--)                             //Delay
+3387  01b2 0a01          	dec	(OFST+0,sp)
+3390  01b4 0d01          	tnz	(OFST+0,sp)
+3391  01b6 26f9          	jrne	L3012
+3392                     ; 184 	delay_ms(15);
+3395  01b8 ae000f        	ldw	x,#15
+3396  01bb cd0000        	call	_delay_ms
+3398                     ; 187 	SPIWrite(LR_RegOpMode,LoRa_Entry_Value);     
+3400  01be ae0188        	ldw	x,#392
+3401  01c1 cd0000        	call	_SPIWrite
+3403                     ; 188 	BurstWrite(LR_RegFrMsb,sx1278FreqTable[Freq_Sel],3);  //setting frequency parameter
+3405  01c4 4b03          	push	#3
+3406  01c6 b600          	ld	a,_Freq_Sel
+3407  01c8 97            	ld	xl,a
+3408  01c9 a603          	ld	a,#3
+3409  01cb 42            	mul	x,a
+3410  01cc 1c0000        	addw	x,#_sx1278FreqTable
+3411  01cf 89            	pushw	x
+3412  01d0 a606          	ld	a,#6
+3413  01d2 cd0000        	call	_BurstWrite
+3415  01d5 5b03          	addw	sp,#3
+3416                     ; 191 	SPIWrite(LR_RegPaConfig,sx1278PowerTable[Power_Sel]); //Setting output power parameter  
+3418  01d7 b600          	ld	a,_Power_Sel
+3419  01d9 5f            	clrw	x
+3420  01da 97            	ld	xl,a
+3421  01db d60003        	ld	a,(_sx1278PowerTable,x)
+3422  01de 97            	ld	xl,a
+3423  01df a609          	ld	a,#9
+3424  01e1 95            	ld	xh,a
+3425  01e2 cd0000        	call	_SPIWrite
+3427                     ; 192 	SPIWrite(LR_RegOcp,(PA_Over_Current_Sel|0b00100000));            //Protect PA 100mA
+3429  01e5 b600          	ld	a,_PA_Over_Current_Sel
+3430  01e7 aa20          	or	a,#32
+3431  01e9 97            	ld	xl,a
+3432  01ea a60b          	ld	a,#11
+3433  01ec 95            	ld	xh,a
+3434  01ed cd0000        	call	_SPIWrite
+3436                     ; 193 	SPIWrite(LR_RegLna,(Gain_Sel<<5));                       //Gain G1
+3438  01f0 b600          	ld	a,_Gain_Sel
+3439  01f2 97            	ld	xl,a
+3440  01f3 a620          	ld	a,#32
+3441  01f5 42            	mul	x,a
+3442  01f6 9f            	ld	a,xl
+3443  01f7 97            	ld	xl,a
+3444  01f8 a60c          	ld	a,#12
+3445  01fa 95            	ld	xh,a
+3446  01fb cd0000        	call	_SPIWrite
+3448                     ; 194 	if(sx1278SpreadFactorTable[Lora_Rate_Sel]==6)         //SFactor=6
+3450  01fe b600          	ld	a,_Lora_Rate_Sel
+3451  0200 5f            	clrw	x
+3452  0201 97            	ld	xl,a
+3453  0202 d60013        	ld	a,(_sx1278SpreadFactorTable,x)
+3454  0205 a106          	cp	a,#6
+3455  0207 264e          	jrne	L1112
+3456                     ; 197 		SPIWrite(LR_RegModemConfig1,((sx1278LoRaBwTable[BandWide_Sel]<<4)+(CR<<1)+0x01));//Implicit Enable CRC Enable(0x02) & Error Coding rate 4/5(0x01), 4/6(0x02), 4/7(0x03), 4/8(0x04)
+3458  0209 b600          	ld	a,_BandWide_Sel
+3459  020b 5f            	clrw	x
+3460  020c 97            	ld	xl,a
+3461  020d d6001a        	ld	a,(_sx1278LoRaBwTable,x)
+3462  0210 97            	ld	xl,a
+3463  0211 a610          	ld	a,#16
+3464  0213 42            	mul	x,a
+3465  0214 9f            	ld	a,xl
+3466  0215 ab03          	add	a,#3
+3467  0217 97            	ld	xl,a
+3468  0218 a61d          	ld	a,#29
+3469  021a 95            	ld	xh,a
+3470  021b cd0000        	call	_SPIWrite
+3472                     ; 198 		SPIWrite(LR_RegModemConfig2,((sx1278SpreadFactorTable[Lora_Rate_Sel]<<4)+(CRC<<2)+0x03));
+3474  021e b600          	ld	a,_Lora_Rate_Sel
+3475  0220 5f            	clrw	x
+3476  0221 97            	ld	xl,a
+3477  0222 d60013        	ld	a,(_sx1278SpreadFactorTable,x)
+3478  0225 97            	ld	xl,a
+3479  0226 a610          	ld	a,#16
+3480  0228 42            	mul	x,a
+3481  0229 9f            	ld	a,xl
+3482  022a ab07          	add	a,#7
+3483  022c 97            	ld	xl,a
+3484  022d a61e          	ld	a,#30
+3485  022f 95            	ld	xh,a
+3486  0230 cd0000        	call	_SPIWrite
+3488                     ; 199 		tmp = SPIRead(0x31);
+3490  0233 a631          	ld	a,#49
+3491  0235 cd0000        	call	_SPIRead
+3493  0238 6b01          	ld	(OFST+0,sp),a
+3494                     ; 200 		tmp &= 0xF8;
+3496  023a 7b01          	ld	a,(OFST+0,sp)
+3497  023c a4f8          	and	a,#248
+3498  023e 6b01          	ld	(OFST+0,sp),a
+3499                     ; 201 		tmp |= 0x05;
+3501  0240 7b01          	ld	a,(OFST+0,sp)
+3502  0242 aa05          	or	a,#5
+3503  0244 6b01          	ld	(OFST+0,sp),a
+3504                     ; 202 		SPIWrite(0x31,tmp);
+3506  0246 7b01          	ld	a,(OFST+0,sp)
+3507  0248 97            	ld	xl,a
+3508  0249 a631          	ld	a,#49
+3509  024b 95            	ld	xh,a
+3510  024c cd0000        	call	_SPIWrite
+3512                     ; 203 		SPIWrite(0x37,0x0C);
+3514  024f ae370c        	ldw	x,#14092
+3515  0252 cd0000        	call	_SPIWrite
+3518  0255 202a          	jra	L3112
+3519  0257               L1112:
+3520                     ; 207 		SPIWrite(LR_RegModemConfig1,((sx1278LoRaBwTable[BandWide_Sel]<<4)+(CR<<1)+0x00));//Explicit Enable CRC Enable(0x02) & Error Coding rate 4/5(0x01), 4/6(0x02), 4/7(0x03), 4/8(0x04)
+3522  0257 b600          	ld	a,_BandWide_Sel
+3523  0259 5f            	clrw	x
+3524  025a 97            	ld	xl,a
+3525  025b d6001a        	ld	a,(_sx1278LoRaBwTable,x)
+3526  025e 97            	ld	xl,a
+3527  025f a610          	ld	a,#16
+3528  0261 42            	mul	x,a
+3529  0262 9f            	ld	a,xl
+3530  0263 ab02          	add	a,#2
+3531  0265 97            	ld	xl,a
+3532  0266 a61d          	ld	a,#29
+3533  0268 95            	ld	xh,a
+3534  0269 cd0000        	call	_SPIWrite
+3536                     ; 208 		SPIWrite(LR_RegModemConfig2,((sx1278SpreadFactorTable[Lora_Rate_Sel]<<4)+(CRC<<2)+0x03));  //SFactor &  LNA gain set by the internal AGC loop 
+3538  026c b600          	ld	a,_Lora_Rate_Sel
+3539  026e 5f            	clrw	x
+3540  026f 97            	ld	xl,a
+3541  0270 d60013        	ld	a,(_sx1278SpreadFactorTable,x)
+3542  0273 97            	ld	xl,a
+3543  0274 a610          	ld	a,#16
+3544  0276 42            	mul	x,a
+3545  0277 9f            	ld	a,xl
+3546  0278 ab07          	add	a,#7
+3547  027a 97            	ld	xl,a
+3548  027b a61e          	ld	a,#30
+3549  027d 95            	ld	xh,a
+3550  027e cd0000        	call	_SPIWrite
+3552  0281               L3112:
+3553                     ; 210 	SPIWrite(LR_RegSymbTimeoutLsb,0xFF);                  //RegSymbTimeoutLsb Timeout = 0x3FF(Max)    
+3555  0281 ae1fff        	ldw	x,#8191
+3556  0284 cd0000        	call	_SPIWrite
+3558                     ; 211 	SPIWrite(LR_RegPreambleMsb,0x00);                     //RegPreambleMsb 
+3560  0287 ae2000        	ldw	x,#8192
+3561  028a cd0000        	call	_SPIWrite
+3563                     ; 212 	SPIWrite(LR_RegPreambleLsb,12);                      	//RegPreambleLsb 8+4=12byte Preamble    
+3565  028d ae210c        	ldw	x,#8460
+3566  0290 cd0000        	call	_SPIWrite
+3568                     ; 213 	SPIWrite(REG_LR_DIOMAPPING2,0x01);                    //RegDioMapping2 DIO5=00, DIO4=01	
+3570  0293 ae4101        	ldw	x,#16641
+3571  0296 cd0000        	call	_SPIWrite
+3573                     ; 214   SPIWrite(LR_RegOpMode,LoRa_Standby_Value);            //Entry standby mode
+3575  0299 ae0109        	ldw	x,#265
+3576  029c cd0000        	call	_SPIWrite
+3578                     ; 215 }
+3581  029f 84            	pop	a
+3582  02a0 81            	ret
+3669                     	xdef	_sx1278_ReadRSSI
+3670                     	xdef	_sx1278Data
+3671                     	xdef	_sx1278LoRaBwTable
+3672                     	xdef	_sx1278SpreadFactorTable
+3673                     	xdef	_sx1278PowerTable
+3674                     	xdef	_sx1278FreqTable
+3675                     	xdef	_sx1278_LoRaTxPacket
+3676                     	xdef	_sx1278_LoRaEntryTx
+3677                     	xdef	_sx1278_LoRaRxPacket
+3678                     	xdef	_sx1278_LoRaReadRSSI
+3679                     	xdef	_sx1278_LoRaEntryRx
+3680                     	xdef	_sx1278_Config
+3681                     	switch	.ubsct
+3682  0000               _Message:
+3683  0000 000000000000  	ds.b	30
+3684                     	xdef	_Message
+3685  001e               _RxData:
+3686  001e 000000000000  	ds.b	64
+3687                     	xdef	_RxData
+3688                     	xref	_delay_ms
+3689                     	xref.b	_SysTime
+3690                     	xref.b	_BandWide_Sel
+3691                     	xref.b	_Lora_Rate_Sel
+3692                     	xref.b	_Gain_Sel
+3693                     	xref.b	_PA_Over_Current_Sel
+3694                     	xref.b	_Power_Sel
+3695                     	xref.b	_Freq_Sel
+3696                     	xref	_BurstWrite
+3697                     	xref	_SPIBurstRead
+3698                     	xref	_SPIWrite
+3699                     	xref	_SPIRead
+3719                     	end
