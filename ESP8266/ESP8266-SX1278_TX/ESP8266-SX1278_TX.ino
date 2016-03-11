@@ -100,12 +100,13 @@ void loop()
  {
   setLoRaMode();									// LoRa mode 
   //TXData[] 		= "EXOSITE00000000000000000000000"; 	
-  sendData(TXData);
+  InitialSendData(TXData);
+  SendData(TXData);
   delay(1000);
 }
 
 //===========================
-void sendData(char buffer[])
+void InitialSendData(char buffer[])
 //===========================
 {
 u8 addr;
@@ -125,9 +126,13 @@ SPIWrite(REG_FIFO_ADDR_PTR,addr);
 while(TXDataLength!=SPIRead(REG_PAYLOAD_LENGTH))
 	{
 	}
+}
+//===========================
+void SendData(char buffer[])
+//===========================
+{
 SPIBurstWrite(0,buffer,TXDataLength);	  
 SPIWrite(REG_OPMODE,LORA_TX);
-DebugLoRa();
 while(digitalRead(DIO0_PIN) == 0)			// once TxDone has flipped, everything has been sent
 	{
   	delay(100);	
