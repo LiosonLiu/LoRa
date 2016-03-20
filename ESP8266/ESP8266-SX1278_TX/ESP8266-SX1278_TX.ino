@@ -98,11 +98,20 @@ void setup()
 void loop()
 //===========================
  {
+  u8 i;
   setLoRaMode();									// LoRa mode 
   //TXData[] 		= "EXOSITE00000000000000000000000"; 	
   InitialSendData(TXData);
   SendData(TXData);
-  delay(1000);
+  InitialReceiveData();
+  for(i=0;i<12;i++)               // Still have issue
+    {
+      if(ReceiveData()==1);
+        i=12;
+      delay(1000);
+      Serial.print("-");
+    }
+  delay(500);
 }
 
 //===========================
@@ -157,14 +166,14 @@ void InitialReceiveData(void)
   SPIWrite(REG_IRQ_FLAGS,0xFF);     
   SPIWrite(REG_PAYLOAD_LENGTH,RXDataLength);    	//RegPayloadLength  30byte(this register must difine when the data long of one byte in SF is 6)
   addr = SPIRead(REG_FIFO_RX_BASE_ADDR);         	//Read RxBaseAddr
-  SPIWrite(REG_FIFO_ADDR_PTR,addr);             	//RxBaseAddr -> FiFoAddrPtr¡¡ 
+  SPIWrite(REG_FIFO_ADDR_PTR,addr);             	//RxBaseAddr -> FiFoAddrPtrï¿½ï¿½ 
   SPIWrite(REG_OPMODE,0x8d);                    	//Continuous Rx Mode//Low Frequency Mode
 	while((SPIRead(REG_MODEM_STAT)&0x04)!=0x04)
 	{
 	}
 }
 //===========================
-void ReceiveData(void)
+u8 ReceiveData(void)
 //===========================
 {
 u8 i,addr,packet_size;
@@ -176,8 +185,15 @@ if(digitalRead(DIO0_PIN) != 0)								// once RxDone has flipped, received
   SPIWrite(REG_FIFO_ADDR_PTR,addr);           //RxBaseAddr -> FiFoAddrPtr    
   packet_size = SPIRead(REG_RX_NB_BYTES);     //Number for received bytes    
   SPIBurstRead(0x00, RXData, packet_size);    
-  SPIWrite(REG_IRQ_FLAGS,0xFF);							
-}
+  SPIWrite(REG_IRQ_FLAGS,0xFF);	
+  for(i=0;i<RXDataLength;i++)
+    {
+     Serial.print(RXData[i],HEX);
+    }
+  Serial.println(" ");	
+  return 1;					
+  }
+return 0;
 }
 
 //===========================
