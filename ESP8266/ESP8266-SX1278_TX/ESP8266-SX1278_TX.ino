@@ -1,16 +1,27 @@
 /*
 Hardware-ESP8266:
-1.SPI 
-    Definition 	SX1276		ESP8266			ESP8266 cuttrnt
-	a.MISO		PIN10		GPIO12		-	LED GREEN		-SPI
-	b.MOSI		PIN11		GPIO13		-	LED BLUE		-SPI
-	c.SCK			PIN9		GPIO14(SCL)	-						-SPI
-	d.CS			PIN12		GPIO16		-							-SPI , GPIO15 - DEAD
+
+									 	------------
+						RST		-|						|-TXD
+			A0		ADC		-|						|-RXD
+						EN		-|						|-IO5
+						IO16	-|						|-IO4 	Button 4
+			IO14/SCLK		-|						|-IO0/PROG-BOOT		
+LED G IO12/MISO		-|						|-IO2
+LED B	IO13/MOSI		-|						|-IO15/CS	LED R
+						VCC		-|						|-GND
+										------------
+							 			| | | | | |
+						   			C M I I M S
+							 			S I O O O C
+							 			0 S 9 1 S L
+				  		 				O   0 I K
+
 	***Note:
 			SX1276 MISO patch to ESP8266 MISO, so does MOSI, do not exchange. 
-			GPIO15 as CS pin, but not functinal for ESP8266
+			GPIO15 as CS pin, but not functinal for ESP8266, use GPIO16 instead.
 2.Indication	
-	a.TX Ind	DIO0		GPIO0							-TX/RX indication	
+	a.TX Ind	DIO0		GPIO2							-TX/RX indication	
 3.Antena control
 	a.ANT_EN	PIN1		GPIO4							-
 4.RESET			PIN4		GPIO5
@@ -20,10 +31,9 @@ Hardware-ESP8266:
 #define u8 unsigned char
 //int led 			= 13;
 int SPI_CS_PIN 	= 16; 
-int DIO0_PIN 		= 0;
+int DIO0_PIN 		= 2;
 int ANT_EN_PIN 	= 4;
 int RESET_PIN		= 5;
-int DEBUG_PIN		= 10;
 
 #define REG_FIFO                    0x00
 #define REG_OPMODE                  0x01
@@ -84,10 +94,12 @@ void setup()
 {                
   // initialize the pins
   pinMode(SPI_CS_PIN, OUTPUT); 
-//  pinMode(DEBUG_PIN, OUTPUT);
-  pinMode(DIO0_PIN, INPUT);
   pinMode(ANT_EN_PIN, OUTPUT);
   pinMode(RESET_PIN, OUTPUT);
+  pinMode(DIO0_PIN, FUNCTION_0);		//GPIO2
+  pinMode(DIO0_PIN, INPUT);  
+  digitalWrite(DIO0_PIN, LOW);
+  
   Serial.begin(115200);
   SPI.setFrequency(1000000);
   SPI.begin();  
@@ -107,10 +119,13 @@ void loop()
   for(i=0;i<12;i++)               // Still have issue
     {
       if(ReceiveData()==1);
+      	{
         i=12;
+        Serial.println("RECEIVED");
+      	}
       delay(1000);
       Serial.print("-");
-    }
+    }    
   delay(500);
 }
 
@@ -161,7 +176,7 @@ void InitialReceiveData(void)
 	digitalWrite(ANT_EN_PIN,LOW);
   SPIWrite(REG_LR_PADAC,0x84);                   	//Normal and Rx
   SPIWrite(REG_HOP_PERIOD,0xFF);                 	//RegHopPeriod NO FHSS
-  SPIWrite(REG_DIO_MAPPING_1,0x01);            //DIO0=00, DIO1=00, DIO2=00, DIO3=01 Valid header      
+  SPIWrite(REG_DIO_MAPPING_1,0x01);            		//DIO0=00, DIO1=00, DIO2=00, DIO3=01 Valid header      
   SPIWrite(REG_IRQ_FLAGS_MASK,0x3F);             	//Open RxDone interrupt & Timeout
   SPIWrite(REG_IRQ_FLAGS,0xFF);     
   SPIWrite(REG_PAYLOAD_LENGTH,RXDataLength);    	//RegPayloadLength  30byte(this register must difine when the data long of one byte in SF is 6)
@@ -180,7 +195,9 @@ u8 i,addr,packet_size;
 if(digitalRead(DIO0_PIN) != 0)								// once RxDone has flipped, received
 	{
   for(i=0;i<RXDataLength;i++) 
+  	{
   	RXData[i] = 0x00;    
+  	}
   addr = SPIRead(REG_FIFO_RX_CURRENT_ADDR);     //last packet addr
   SPIWrite(REG_FIFO_ADDR_PTR,addr);           //RxBaseAddr -> FiFoAddrPtr    
   packet_size = SPIRead(REG_RX_NB_BYTES);     //Number for received bytes    
@@ -190,7 +207,7 @@ if(digitalRead(DIO0_PIN) != 0)								// once RxDone has flipped, received
     {
      Serial.print(RXData[i],HEX);
     }
-  Serial.println(" ");	
+  Serial.println("=");	
   return 1;					
   }
 return 0;
