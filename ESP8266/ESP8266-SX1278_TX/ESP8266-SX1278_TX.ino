@@ -21,7 +21,7 @@ LED B	IO13/MOSI		-|						|-IO15/CS	LED R
 			SX1276 MISO patch to ESP8266 MISO, so does MOSI, do not exchange. 
 			GPIO15 as CS pin, but not functinal for ESP8266, use GPIO16 instead.
 2.Indication	
-	a.TX Ind	DIO0		GPIO2							-TX/RX indication	
+	a.TX Ind	DIO0		GPIO16							-TX/RX indication	
 3.Antena control
 	a.ANT_EN	PIN1		GPIO4							-
 4.RESET			PIN4		GPIO5
@@ -30,8 +30,8 @@ LED B	IO13/MOSI		-|						|-IO15/CS	LED R
 #include <SPI.h>
 #define u8 unsigned char
 //int led 			= 13;
-int SPI_CS_PIN 	= 16; 
-int DIO0_PIN 		= 2;
+int SPI_CS_PIN 	= 15; 
+int DIO0_PIN 		= 16;
 int ANT_EN_PIN 	= 4;
 int RESET_PIN		= 5;
 
