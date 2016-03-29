@@ -202,6 +202,7 @@ for(i=0;i<10;i++)
     for(i=0;i<RXDataLength;i++)
       {
       Serial.print(RXData[i],HEX);
+      Serial.print(" ");
       }   
 	  }						
   }
