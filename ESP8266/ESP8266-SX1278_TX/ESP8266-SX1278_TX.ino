@@ -96,7 +96,6 @@ void setup()
   pinMode(SPI_CS_PIN, OUTPUT); 
   pinMode(ANT_EN_PIN, OUTPUT);
   pinMode(RESET_PIN, OUTPUT);
-  pinMode(DIO0_PIN, FUNCTION_0);		//GPIO2
   pinMode(DIO0_PIN, INPUT);  
   digitalWrite(DIO0_PIN, LOW);
   
@@ -110,23 +109,12 @@ void setup()
 void loop()
 //===========================
  {
-  u8 i;
   setLoRaMode();									// LoRa mode 
   //TXData[] 		= "EXOSITE00000000000000000000000"; 	
   InitialSendData(TXData);
   SendData(TXData);
   InitialReceiveData();
-  for(i=0;i<12;i++)               // Still have issue
-    {
-      if(ReceiveData()==1);
-      	{
-        i=12;
-        Serial.println("RECEIVED");
-      	}
-      delay(1000);
-      Serial.print("-");
-    }    
-  delay(500);
+  ReceiveData();
 }
 
 //===========================
@@ -172,7 +160,7 @@ void InitialReceiveData(void)
 //===========================
 {
 	u8 addr;
-	Serial.print("Receive: ");
+	Serial.println("====Initial Receive====");
 	digitalWrite(ANT_EN_PIN,LOW);
   SPIWrite(REG_LR_PADAC,0x84);                   	//Normal and Rx
   SPIWrite(REG_HOP_PERIOD,0xFF);                 	//RegHopPeriod NO FHSS
@@ -188,29 +176,43 @@ void InitialReceiveData(void)
 	}
 }
 //===========================
-u8 ReceiveData(void)
+unsigned ReceiveData(void)
 //===========================
 {
 u8 i,addr,packet_size;
-if(digitalRead(DIO0_PIN) != 0)								// once RxDone has flipped, received
-	{
-  for(i=0;i<RXDataLength;i++) 
-  	{
-  	RXData[i] = 0x00;    
-  	}
-  addr = SPIRead(REG_FIFO_RX_CURRENT_ADDR);     //last packet addr
-  SPIWrite(REG_FIFO_ADDR_PTR,addr);           //RxBaseAddr -> FiFoAddrPtr    
-  packet_size = SPIRead(REG_RX_NB_BYTES);     //Number for received bytes    
-  SPIBurstRead(0x00, RXData, packet_size);    
-  SPIWrite(REG_IRQ_FLAGS,0xFF);	
-  for(i=0;i<RXDataLength;i++)
+Serial.print("Waiting");
+for(i=0;i<10;i++)
+  {
+  if(digitalRead(DIO0_PIN)==0)
     {
-     Serial.print(RXData[i],HEX);
+    delay(1000);
+    Serial.print(".");  
     }
-  Serial.println("=");	
-  return 1;					
+  else 
+	  {
+    Serial.println(" ");
+    Serial.print("Received data = ");
+    for(i=0;i<RXDataLength;i++) 
+  	  {RXData[i] = 0x00;}
+    addr = SPIRead(REG_FIFO_RX_CURRENT_ADDR);     //last packet addr
+    SPIWrite(REG_FIFO_ADDR_PTR,addr);           //RxBaseAddr -> FiFoAddrPtr    
+    packet_size = SPIRead(REG_RX_NB_BYTES);     //Number for received bytes    
+    SPIBurstRead(0x00, RXData, packet_size);    
+    SPIWrite(REG_IRQ_FLAGS,0xFF);	
+    for(i=0;i<RXDataLength;i++)
+      {
+      Serial.print(RXData[i],HEX);
+      }   
+	  }						
   }
-return 0;
+if(i==10)
+  {
+  Serial.print("Time out");
+  Serial.println(" ");
+  return 0;
+  }
+Serial.println(" ");  
+return 1;    
 }
 
 //===========================
