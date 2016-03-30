@@ -110,16 +110,15 @@ while(1)
 				FAN_H();
 			else
 				FAN_L();
-			//RED_LED_L();
-			ReadDHT11();			//Read Temperature & Humidity
-			Message[27]=DHT11Humi;
-			Message[28]=DHT11Temp;
+			//RED_LED_L();			
+			Message[29]=DHT11Humi;
+			Message[30]=DHT11Temp;
 			sx1278_LoRaEntryTx();	
 			sx1278_LoRaTxPacket();
 			//RED_LED_H();			
 			sx1278_LoRaEntryRx();
 			}
-		
+		ReadDHT11();			//Read Temperature & Humidity
 		}
 	else					//Master
 		{
