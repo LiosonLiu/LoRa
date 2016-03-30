@@ -62,8 +62,8 @@ int RESET_PIN		= 5;
 #define REG_DIO_MAPPING_2           0x41
 #define REG_LR_PADAC								0x4D
 
-char TXData[] 		= "EXOSITE00000000000000000000000";
-char RXData[]			=	"000000000000000000000000000000";
+char TXData[] 		= "EXOSITE0000000000000000000000000";
+char RXData[]			=	"00000000000000000000000000000000";
 
 // MODES
 #define LORA_SLEEP             			0x08
@@ -86,8 +86,8 @@ const u8 sx1278SpreadFactorTable[7] = {6,7,8,9,10,11,12};	//64/128/256/512/1024/
 const u8 sx1278LoRaBwTable[10] 			= {0,1,2,3,4,5,6,7,8,9};	//7.8KHz,10.4KHz,15.6KHz,20.8KHz,31.2KHz,41.7KHz,62.5KHz,125KHz,250KHz,500KHz
 
 //Globale Variable
-u8 TXDataLength=30;
-u8 RXDataLength=30;
+u8 TXDataLength=32;
+u8 RXDataLength=32;
 //===========================
 void setup() 
 //===========================
