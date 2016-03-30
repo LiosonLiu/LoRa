@@ -212,8 +212,8 @@ extern void delay_ms(unsigned int ms);
 extern void delay_us(unsigned int us);
 
 
-extern u8 RxData[64];
-extern u8 Message[30];
+extern u8 RxData[32];
+extern u8 Message[32];
 extern void sx1278_Config(void);
 extern u8 sx1278_LoRaEntryRx(void);
 extern u8 sx1278_LoRaReadRSSI(void);

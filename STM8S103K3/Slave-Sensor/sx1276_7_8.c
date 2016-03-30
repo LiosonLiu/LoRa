@@ -26,10 +26,10 @@ const u8 sx1278PowerTable[16]	= {0xF0,0xF1,0xF2,0xF3,0xF4,0xF5,0xF6,0xF7,0xF8,0x
 const u8 sx1278SpreadFactorTable[7] =	{6,7,8,9,10,11,12};
 const u8 sx1278LoRaBwTable[10] 			=	{0,1,2,3,4,5,6,7,8,9};	//7.8KHz,10.4KHz,15.6KHz,20.8KHz,31.2KHz,41.7KHz,62.5KHz,125KHz,250KHz,500KHz
 const u8 sx1278Data[] 							= {"**Exosite LoRa Demo**"};
-#define PayloadLengthValue	30
+#define PayloadLengthValue	32
 #define HeadLengthValue			7		//EXOSITE
 u8 Message[PayloadLengthValue];
-u8 RxData[64];
+u8 RxData[32];
 
 #define LoRa_Standby_Value	0x09
 #define LoRa_Sleep_Value		0x08
@@ -148,7 +148,9 @@ u8 sx1278_LoRaTxPacket(void)
 	//BurstWrite(0x00, (u8 *)sx1278Data, PayloadLengthValue);
 	BurstWrite(0x00, Message, PayloadLengthValue);
 	SPIWrite(LR_RegOpMode,0x8b);                    	//Tx Mode           
-RED_LED_L();
+	RED_LED_L();
+	delay_ms(100);
+	RED_LED_H();
 	while(1)
 	{
 		if(Get_NIRQ())                      						//Packet send over
@@ -159,7 +161,6 @@ RED_LED_L();
 			break;
 		}
 	} 
-	RED_LED_H();
 }
 
 //=====================================

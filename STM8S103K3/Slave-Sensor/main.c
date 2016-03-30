@@ -106,13 +106,20 @@ while(1)
 			GREEN_LED_L();
 			delay_ms(100);
 			GREEN_LED_H();
+			if(RxData[28]==0x01)
+				FAN_H();
+			else
+				FAN_L();
 			//RED_LED_L();
-			sx1278_LoRaEntryTx();			
+			ReadDHT11();			//Read Temperature & Humidity
+			Message[27]=DHT11Humi;
+			Message[28]=DHT11Temp;
+			sx1278_LoRaEntryTx();	
 			sx1278_LoRaTxPacket();
 			//RED_LED_H();			
 			sx1278_LoRaEntryRx();
 			}
-		ReadDHT11();			//Read Temperature & Humidity
+		
 		}
 	else					//Master
 		{
@@ -248,10 +255,10 @@ void TIM_Init(void)
     TIM1_PSCRH  = 0x00;           /* Configure TIM1 prescaler_H       */
 		TIM1_PSCRL  = 0x0f;           /* Configure TIM1 prescaler_L   16 frequency divier     */
 		TIM1_IER   |= 0x01;						//enable refresh interrupt
-    TIM1_CR1    |= 0x80;
+    TIM1_CR1   |= 0x80;
 		
 		/* TIM4 function for system clock */
-		TIM4_ARR   = 0xa0;           	// Freq control register: ARR automatic reload 10us
+		TIM4_ARR   	= 0xa0;          	// Freq control register: ARR automatic reload 10us
 
     TIM4_PSCR   = 0x00;          	// Configure TIM4 prescaler =128  Base clockΪ8us 
 		TIM4_IER   |= 0x01;						//enable refresh interrupt
@@ -291,14 +298,19 @@ void InitialMessageSlave(void)
 	Message[25]=0;
 	Message[26]=0;
 	Message[27]=0;
-	Message[28]=0;
-	Message[29]=0;
+	Message[28]=0;			//FAN
+	Message[29]=0;			//Humidity
+	Message[30]=0;			//Temperature
+	Message[31]=Message[0]^Message[1]^Message[2]^Message[3]^Message[4]^Message[5]^Message[6]^Message[7]^Message[8]^Message[9]^Message[10]^Message[11]^
+							Message[12]^Message[13]^Message[14]^Message[15]^Message[16]^Message[17]^Message[18]^Message[19]^Message[20]^Message[21]^Message[22]^
+							Message[23]^Message[24]^Message[25]^Message[26]^Message[27]^Message[28]^Message[29]^Message[30]^Message[31];
 }
 
 //=====================================
 void InitialMessageMaster(void)
 //=====================================
 {
+	u8 i;
 	Message[0]='E';
 	Message[1]='X';
 	Message[2]='O';
@@ -306,29 +318,10 @@ void InitialMessageMaster(void)
 	Message[4]='I';
 	Message[5]='T';
 	Message[6]='E';	
-	Message[7]=0;
-	Message[8]=0;
-	Message[9]=0;
-	Message[10]=0;
-	Message[11]=0;
-	Message[12]=0;
-	Message[13]=0;
-	Message[14]=0;
-	Message[15]=0;
-	Message[16]=0;
-	Message[17]=0;
-	Message[18]=0;
-	Message[19]=0;
-	Message[20]=0;
-	Message[21]=0;
-	Message[22]=0;
-	Message[23]=0;
-	Message[24]=0;
-	Message[25]=0;
-	Message[26]=0;
-	Message[27]=0;
-	Message[28]=0;
-	Message[29]=0;	
+	for(i=7;i<31;i++)
+		{
+		Message[i]=0;
+		}
 }	
 //=====================================
 void Encryption(void)
