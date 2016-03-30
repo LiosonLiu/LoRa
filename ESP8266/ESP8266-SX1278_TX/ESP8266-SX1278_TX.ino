@@ -110,7 +110,7 @@ void loop()
 //===========================
  {
   setLoRaMode();									// LoRa mode 
-  //TXData[] 		= "EXOSITE00000000000000000000000"; 	
+  //TXData[] 		= "EXOSITE00000000000000000000000"; 
   InitialSendData(TXData);
   SendData(TXData);
   InitialReceiveData();
