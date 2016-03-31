@@ -93,7 +93,7 @@ const u8 sx1278LoRaBwTable[10] 			= {0,1,2,3,4,5,6,7,8,9};	//7.8KHz,10.4KHz,15.6
 u8 TXDataLength=32;
 u8 RXDataLength=32;
 
-//========================WIFI
+//========================WIFI==========================
 
 //Port
 const int LDR 		= A0;
@@ -105,13 +105,13 @@ const char* password = "@Exo1111";
 
 const char* host 	= "m2.exosite.com";
 const int httpsPort = 443;
-const char* cik  	= "78a23b8c723d5dc5942bd8ce9c2a2b71412de9f9";
+const char* cik  	= "4ef0095f30dee458a9e455e41361ce22c8f0e8ad";
 const char* aliasA 	= "fan_switch";
 const char* aliasB 	= "temperature_sensor";
 const char* aliasC 	= "humidity_sensor";
 const char* fingerprint = "1abbf683b33fb3e4ab4dd829e26608884e61e61d";
 
-String FanData;
+char FanData;
 const long RPCinterval = 1200;//1.2sec
 unsigned long RPCpreviousTimeStamp;
 unsigned char HumidityData,TemperatureData;
@@ -154,7 +154,7 @@ if (WiFi.status() != WL_CONNECTED)
   
 if (CurrentTimeStamp - RPCpreviousTimeStamp >= RPCinterval) 
 	{
-	Serial.print("=============================Connection START=============================\r\n");
+	Serial.print("=============================WiFi Connection START=============================\r\n");
     RPCpreviousTimeStamp = CurrentTimeStamp;    
     Serial.print("connecting to ");
     Serial.println(host);
@@ -172,14 +172,10 @@ if (CurrentTimeStamp - RPCpreviousTimeStamp >= RPCinterval)
     	return;
     	}
 	ReadDataFromCloud(client);
-	
-//	red 	= ASCIItoHex(FanData[0],FanData[1]);
-//	green	= ASCIItoHex(FanData[2],FanData[3]);
-//	blue 	= ASCIItoHex(FanData[4],FanData[5]);
 	}
 
 //esp8266_adc=0xff-analogRead(LDR);
-u8 TXData[28]=FanData;
+TXData[28]=FanData;
 TemperatureData=RXData[29];
 HumidityData=RXData[30];
 //HumidityData=digitalRead(humidity_sensor);  
@@ -425,7 +421,7 @@ void readAllRegs( )
 
 
 
-//===============================================		WIFI
+//===============================================		WIFI  ============================================
 
 
 //=================
@@ -551,8 +547,9 @@ void ReadDataFromCloud(WiFiClientSecure& client)
   }
   if (root2["result"][0].is<JsonArray&>()) 
   	{
-    String mesg1 = root2["result"][0][1];
-    FanData = mesg1;
+    //String mesg1 = root2["result"][0][1];
+    //FanData = mesg1;
+    FanData= root2["result"][0];
     Serial.print("FanData=");
     Serial.println(FanData);    
   	}
