@@ -80,7 +80,7 @@ u8 sx1278_LoRaReadRSSI(void)
 u8 sx1278_LoRaRxPacket(void)
 //=====================================
 {
-  u8 i; 
+  u8 i,j; 
   u8 addr;
   u8 packet_size; 
   if(Get_NIRQ())
@@ -101,7 +101,17 @@ u8 sx1278_LoRaRxPacket(void)
         break;  
     }    
     if(i>=(HeadLengthValue-1))                    //Rx success
-      return(1);
+			{
+			j=0;
+			for(i=0;i<packet_size;i++)
+				{
+				j^=RxData[i];	
+				}
+			if(j==0)	
+				return(1);
+			else
+				return(0);
+			}
     else
       return(0);
   }
@@ -143,9 +153,14 @@ u8 sx1278_LoRaTxPacket(void)
 //=====================================
 { 
   u8 TxFlag=0;
-  u8 addr;
+  u8 addr,i;
   
 	//BurstWrite(0x00, (u8 *)sx1278Data, PayloadLengthValue);
+	Message[PayloadLengthValue-1]=0;
+	for(i=0;i<(PayloadLengthValue-1);i++)
+		{
+		Message[PayloadLengthValue-1]^=Message[i];
+		}
 	BurstWrite(0x00, Message, PayloadLengthValue);
 	SPIWrite(LR_RegOpMode,0x8b);                    	//Tx Mode           
 	RED_LED_L();
