@@ -121,9 +121,9 @@ void loop()
 void InitialSendData(char buffer[])
 //===========================
 {
-u8 addr;
+u8 addr=0;
 Serial.print("Send: ");
-Serial.println(buffer);  
+Serial.println(buffer); 
 digitalWrite(ANT_EN_PIN,HIGH);
 SPIWrite(REG_OPMODE,LORA_STANDBY);
 SPIWrite(REG_DIO_MAPPING_1,0x41); 						// Change the DIO0_PIN mapping to 01 so we can listen for TxDone on the interrupt
@@ -143,6 +143,12 @@ while(TXDataLength!=SPIRead(REG_PAYLOAD_LENGTH))
 void SendData(char buffer[])
 //===========================
 {
+u8 i;
+buffer[TXDataLength-1]=0;
+for(i=0;i<(TXDataLength-1);i++)
+	{
+	buffer[TXDataLength-1]^=buffer[i];
+	}	
 SPIBurstWrite(0,buffer,TXDataLength);	  
 SPIWrite(REG_OPMODE,LORA_TX);
 while(digitalRead(DIO0_PIN) == 0)			// once TxDone has flipped, everything has been sent
@@ -179,7 +185,7 @@ void InitialReceiveData(void)
 unsigned ReceiveData(void)
 //===========================
 {
-u8 i,addr,packet_size;
+u8 i,j,addr,packet_size;
 Serial.print("Waiting");
 for(i=0;i<10;i++)
   {
@@ -199,9 +205,11 @@ for(i=0;i<10;i++)
     packet_size = SPIRead(REG_RX_NB_BYTES);     //Number for received bytes    
     SPIBurstRead(0x00, RXData, packet_size);    
     SPIWrite(REG_IRQ_FLAGS,0xFF);	
+    j=0;
     for(i=0;i<RXDataLength;i++)
       {
-      Serial.print(RXData[i],HEX);
+      j^=RXData[i];	
+      Serial.print(RXData[i],HEX);      
       Serial.print(" ");
       }   
 	  }						
@@ -212,6 +220,12 @@ if(i==10)
   Serial.println(" ");
   return 0;
   }
+if(j!=0)
+	{
+	Serial.print("CheckSum Error");
+  Serial.println(" ");
+  return 0;	
+	}  
 Serial.println(" ");  
 return 1;    
 }
