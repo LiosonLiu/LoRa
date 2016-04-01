@@ -100,18 +100,19 @@ const int LDR 		= A0;
 const int humidity_sensor 	= 4;
 
 //Value
-const char* ssid 	= "ExoDemo";
-const char* password = "@Exo1111";
+const char* ssid 	= "PowerCloud";
+const char* password = "0919680044";
 
 const char* host 	= "m2.exosite.com";
 const int httpsPort = 443;
-const char* cik  	= "4ef0095f30dee458a9e455e41361ce22c8f0e8ad";
+const char* cik  	= "10474144e4428eeb8ef8e7aeb27fbc3f3ae83280"; //embedded.exosite.com
 const char* aliasA 	= "fan_switch";
 const char* aliasB 	= "temperature_sensor";
 const char* aliasC 	= "humidity_sensor";
 const char* fingerprint = "1abbf683b33fb3e4ab4dd829e26608884e61e61d";
 
-char FanData;
+String FanDataString;
+unsigned char FanData;
 const long RPCinterval = 1200;//1.2sec
 unsigned long RPCpreviousTimeStamp;
 unsigned char HumidityData,TemperatureData;
@@ -139,7 +140,7 @@ void loop()
 {
 unsigned long CurrentTimeStamp = millis();			
 WiFiClientSecure client;
- 	
+Serial.print("=============================LoRa Connection START=============================\r\n"); 	
 setLoRaMode();									// LoRa mode 
 //TXData[] 		= "EXOSITE00000000000000000000000"; 
 InitialSendData(TXData);
@@ -547,11 +548,12 @@ void ReadDataFromCloud(WiFiClientSecure& client)
   }
   if (root2["result"][0].is<JsonArray&>()) 
   	{
-    //String mesg1 = root2["result"][0][1];
-    //FanData = mesg1;
-    FanData= root2["result"][0];
+    String mesg1 = root2["result"][0][1];
+    FanDataString = mesg1;
+    //FanData= root2["result"][0];
     Serial.print("FanData=");
-    Serial.println(FanData);    
+    Serial.println(FanDataString);
+    FanData=ASCIItoHex(FanDataString[0],FanDataString[1]);    
   	}
 }
 
