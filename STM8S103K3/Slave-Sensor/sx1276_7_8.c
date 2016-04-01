@@ -157,7 +157,7 @@ u8 sx1278_LoRaTxPacket(void)
   
 	//BurstWrite(0x00, (u8 *)sx1278Data, PayloadLengthValue);
 	Message[PayloadLengthValue-1]=0;
-	for(i=0;i<(PayloadLengthValue-1);i++)
+	for(i=0;i<(PayloadLengthValue-2);i++)
 		{
 		Message[PayloadLengthValue-1]^=Message[i];
 		}
