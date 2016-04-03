@@ -1,27 +1,4 @@
-//===========================Example
-#ifndef PwmLed_h
-#define PwmLed_h
 
-#include <inttypes.h>
-
-class PwmLed
-{
-
-public:
-  unsigned long m_lastTime;
-  uint8_t m_pin;
-  int m_brightness;
-  int m_fadeAmount;
-  unsigned long m_delayDuration;
-  
-  PwmLed(void);
-  void set(uint8_t pin, int initBrightness, int fadeAmount, unsigned long delayDuration);
-  void update(void);
-};
-
-#endif
-
-//==========================Real
 /*
 Hardware-ESP8266:
 
@@ -49,28 +26,33 @@ LED B	IO13/MOSI	-|				|-IO15/CS	LED R
 
 
 
-#ifndef LoRa.h
-#define LoRa.h
-#include <SPI.h>
+#ifndef LoRa_h
+#define LoRa_h
+#include "Arduino.h"	
+#include <inttypes.h>	
 class LoRa
 {
 public:
-	int 	m_SPI_CS_PIN;	//15 
+	int 	m_SPI_CS_PIN;	//15
+	int 	m_SPI_MISO_PIN;	//12
+ 	int 	m_SPI_MOSI_PIN;	//13
+ 	int 	m_SPI_SCK_PIN;	//14	
 	int 	m_DIO0_PIN; 	//16
 	int 	m_ANT_EN_PIN; 	//4
 	int 	m_RESET_PIN;	//5
+
 	uint8_t	m_TXLength;		//32
 	uint8_t m_RXLength;		//32
-	char m_TXData[] 	= "EXOSITE0000000000000000000000000";
-	char m_RXData[]		= "00000000000000000000000000000000";
+	char m_TXData[128]; 	//= "EXOSITE0000000000000000000000000";
+	char m_RXData[128];	//= "00000000000000000000000000000000";
+	//char m_TXData[] 	= "EXOSITE0000000000000000000000000";
+	//char m_RXData[]		= "00000000000000000000000000000000";
 	LoRa(void);	
-	void LoRa::Initial(uint8_t SPI_CS_PIN,uint8_t ANT_EN_PIN,uint8_t RESET_PIN,uint8_t DIO0_PIN);
-	void LoRa::InitialSend(uint8_t TX_Length);
-	void LoRa::Send(char buffer[]);
-	void LoRa::InitialReceive(uint8_t RX_Length);
-	unsigned LoRa::Receive(unsigned long Duration);
-
-
+	void Initial(uint8_t SPI_CS_PIN,uint8_t SPI_MISO_PIN,uint8_t SPI_MOSI_PIN,uint8_t SPI_SCK_PIN,uint8_t ANT_EN_PIN,uint8_t RESET_PIN,uint8_t DIO0_PIN);
+	void InitialSend(uint8_t TX_Length);
+	void Send(char buffer[]);
+	void InitialReceive(uint8_t RX_Length);
+	unsigned Receive(unsigned long Duration);
 };
 // REGISTER
 #define REG_FIFO                    0x00
@@ -112,16 +94,12 @@ public:
 #define Lora_Rate_Sel				6
 #define BandWidth_Sel				7
 // INT
-#define u8 unsigned char
+//#define u8 unsigned char
 
-const u8 Freq433Table[3] 			= {0x85,0x3b,0x13};	//433Mhz
-const u8 sx1278PowerTable[16]		= {0xF0,0xF1,0xF2,0xF3,0xF4,0xF5,0xF6,0xF7,0xF8,0xF9,0xFA,0xFB,0xFC,0xFD,0xFE,0xFF};    //FF=20dbm,FC=17dbm,F9=14dbm,F6=11dbm 
-const u8 sx1278SpreadFactorTable[7] = {6,7,8,9,10,11,12};	//64/128/256/512/1024/2048/4096 chips/symble
-const u8 sx1278LoRaBwTable[10] 		= {0,1,2,3,4,5,6,7,8,9};	//7.8KHz,10.4KHz,15.6KHz,20.8KHz,31.2KHz,41.7KHz,62.5KHz,125KHz,250KHz,500KHz
-
-
-
-
+const unsigned char Freq433Table[3] 			= {0x85,0x3b,0x13};	//433Mhz
+const unsigned char sx1278PowerTable[16]		= {0xF0,0xF1,0xF2,0xF3,0xF4,0xF5,0xF6,0xF7,0xF8,0xF9,0xFA,0xFB,0xFC,0xFD,0xFE,0xFF};    //FF=20dbm,FC=17dbm,F9=14dbm,F6=11dbm 
+const unsigned char sx1278SpreadFactorTable[7] = {6,7,8,9,10,11,12};	//64/128/256/512/1024/2048/4096 chips/symble
+const unsigned char sx1278LoRaBwTable[10] 		= {0,1,2,3,4,5,6,7,8,9};	//7.8KHz,10.4KHz,15.6KHz,20.8KHz,31.2KHz,41.7KHz,62.5KHz,125KHz,250KHz,500KHz
 
 #endif
 
