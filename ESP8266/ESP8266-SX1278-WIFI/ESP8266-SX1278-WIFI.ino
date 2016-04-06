@@ -100,8 +100,8 @@ const int LDR 		= A0;
 const int humidity_sensor 	= 4;
 
 //Value
-const char* ssid 	= "PowerCloud";
-const char* password = "0919680044";
+const char* ssid 	= "ExoDemo";
+const char* password = "@Exo1111";
 
 const char* host 	= "m2.exosite.com";
 const int httpsPort = 443;
@@ -250,7 +250,7 @@ void InitialReceiveData(void)
 unsigned ReceiveData(void)
 //===========================
 {
-u8 i,j,addr,packet_size;
+u8 i,j,k,addr,packet_size;
 Serial.print("Waiting");
 for(i=0;i<10;i++)
   {
@@ -271,12 +271,12 @@ for(i=0;i<10;i++)
     SPIBurstRead(0x00, RXData, packet_size);    
     SPIWrite(REG_IRQ_FLAGS,0xFF);	
     j=0;
-    for(i=0;i<RXDataLength;i++)
+    for(k=0;k<RXDataLength;k++)
       {
       j^=RXData[i];	
-      Serial.print(RXData[i],HEX);      
+      Serial.print(RXData[k],HEX);      
       Serial.print(" ");
-      }   
+      }        
 	  }						
   }
 if(i==10)
@@ -553,7 +553,7 @@ void ReadDataFromCloud(WiFiClientSecure& client)
     //FanData= root2["result"][0];
     Serial.print("FanData=");
     Serial.println(FanDataString);
-    FanData=ASCIItoHex(FanDataString[0],FanDataString[1]);    
+    FanData=ASCIItoHex(FanDataString[1],FanDataString[0]);    
   	}
 }
 
