@@ -207,7 +207,8 @@ extern u8 Gain_Sel;
 extern u8 Lora_Rate_Sel;
 extern u8 BandWide_Sel;
 extern u8 Fsk_Rate_Sel;
-extern u16 SysTime;
+extern u16 SysTime0;
+extern u16 SysTime1;
 extern void delay_ms(unsigned int ms);
 extern void delay_us(unsigned int us);
 

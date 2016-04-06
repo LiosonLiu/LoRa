@@ -56,12 +56,12 @@ u8 sx1278_LoRaEntryRx(void)
   SPIWrite(LR_RegFifoAddrPtr,addr);               //RxBaseAddr -> FiFoAddrPtr¡¡ 
   SPIWrite(LR_RegOpMode,0x8d);                    //Continuous Rx Mode//Low Frequency Mode
 	//SPIWrite(LR_RegOpMode,0x05);                  //Continuous Rx Mode//High Frequency Mode
-	SysTime = 0;
+	SysTime1 = 0;
 	while(1)
 	{
 		if((SPIRead(LR_RegModemStat)&0x04)==0x04)   	//Rx-on going RegModemStat
 			break;
-		if(SysTime>=3)	
+		if(SysTime1>=3)	
 			return 0;                                   //over time for error
 	}
 }
@@ -135,7 +135,7 @@ u8 sx1278_LoRaEntryTx(void)
   SPIWrite(LR_RegPayloadLength,PayloadLengthValue);               //RegPayloadLength  30byte  
   addr = SPIRead(LR_RegFifoTxBaseAddr);           //RegFiFoTxBaseAddr
   SPIWrite(LR_RegFifoAddrPtr,addr);               //RegFifoAddrPtr
-	SysTime = 0;
+	SysTime1 = 0;
 	while(1)
 	{
 		temp=SPIRead(LR_RegPayloadLength);
@@ -143,7 +143,7 @@ u8 sx1278_LoRaEntryTx(void)
 		{
 			break; 
 		}
-		if(SysTime>=3)	
+		if(SysTime1>=3)	
 			return 0;
 	}
 }

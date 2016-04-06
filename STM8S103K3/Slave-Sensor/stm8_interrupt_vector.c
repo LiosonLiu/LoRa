@@ -5,7 +5,8 @@
 #include "STM8S_type.h"
 #include "sx1276_7_8.h"
 
-extern u16 SysTime;
+extern u16 SysTime0;
+extern u16 SysTime1;
 extern u16 time2_count;
 
 
@@ -60,12 +61,20 @@ struct interrupt_vector {
 	if(TIM1_SR1 & 0x01)
 	{
 		TIM1_SR1 &= 0xfe; //clear time1 overflow flag
-		SysTime++;
-		if(SysTime > 1500)
+		SysTime0++;
+		SysTime1++;
+		if(SysTime0 > 200)
+			{
+			SysTime0 = 0;
+			time_flag |=0x01;
+			}
+		
+		if(SysTime1 > 1500)
 		{
-			SysTime = 0;
-			time_flag |= 0x01;
+			SysTime1 = 0;
+			time_flag |= 0x02;
 		}
+		
 	}
 	return;
 }

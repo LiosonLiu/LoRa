@@ -29,8 +29,24 @@
 #define SET_DATA_PIN_L()			PA_ODR	&= 0b11110111
 #define GET_DATA_PIN()				(PA_IDR &= 0b00001000)							//PA3
 
+//================SELECT=======================
+#define SET_SELED0_PIN_OUTPUT()	PA_DDR  |= 0b00000010							//PA1
+#define SET_SELED0_PIN_H()			PA_ODR	|= 0b00000010
+#define	SET_SELED0_PIN_L()			PA_ODR	&= 0b11111101
+#define SET_SELED1_PIN_OUTPUT()	PA_DDR  |= 0b00000100							//PA2
+#define SET_SELED1_PIN_H()			PA_ODR	|= 0b00000100
+#define	SET_SELED1_PIN_L()			PA_ODR	&= 0b11111011
+#define SET_SELED2_PIN_OUTPUT()	PB_DDR  |= 0b00001000							//PB3
+#define SET_SELED2_PIN_H()			PB_ODR	|= 0b00001000
+#define	SET_SELED2_PIN_L()			PB_ODR	&= 0b11110111
+#define SET_SELED3_PIN_OUTPUT()	PB_DDR  |= 0b10000000							//PB7
+#define SET_SELED3_PIN_H()			PB_ODR	|= 0b10000000
+#define	SET_SELED3_PIN_L()			PB_ODR	&= 0b01111111
 //================DEBUG========================
 #define SET_DEBUG_PIN_OUTPUT()	PB_DDR	|= 0b10000000							//PB7
 #define SET_DEBUG_PIN_INTPUT()	PB_DDR	&= 0b01111111
 #define	SET_DEBUG_PIN_H()				PB_ODR	|= 0b10000000
 #define	SET_DEBUG_PIN_L()				PB_ODR	&= 0b01111111
+
+
+

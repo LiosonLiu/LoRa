@@ -15,7 +15,8 @@ Note: Check IO.h for pin config
 
 #include "main.h" 
 #include "dht11.h"
-u16 SysTime;
+u16 SysTime0;
+u16 SysTime1;
 u16 time2_count;
 u8 rf_rx_packet_length;
 u8 mode;//lora--1/FSK--0
@@ -27,9 +28,13 @@ u8 Lora_Rate_Sel;
 u8 BandWide_Sel;
 u8 Fsk_Rate_Sel;
 u8 time_flag;
+u8 RotateLedFlag;
+u8 FanEnable;
+#define time_100ms	0b00000001
+#define time_1s			0b00000010
 /*{
-bit0 time_1s;
-bit1 time_2s;
+bit0 time_100ms;
+bit1 time_1s;
 bit2 time_50ms;
 bit3 ;
 bit4 ;
@@ -65,6 +70,7 @@ void delay_ms(unsigned int ms);
 void delay_us(unsigned int us);
 void InitialMessageSlave(void);
 void InitialMessageMaster(void);
+void RotateSELED(void);
 #define EEPower_Sel_Address 0x4000
 #define EEPA_OC_Sel_Address 0x4001
 #define EEGain_Sel_Address	0x4002
@@ -106,10 +112,16 @@ while(1)
 			GREEN_LED_L();
 			delay_ms(100);
 			GREEN_LED_H();
-			if(RxData[28]==0x01)
+			if(RxData[28]==1)
+				{
 				FAN_H();
+				FanEnable=1;
+				}
 			else
+				{
 				FAN_L();
+				FanEnable=0;
+				}
 			//RED_LED_L();			
 			Message[29]=DHT11Humi;
 			Message[30]=DHT11Temp;
@@ -119,6 +131,21 @@ while(1)
 			sx1278_LoRaEntryRx();
 			}
 		ReadDHT11();			//Read Temperature & Humidity
+		if(FanEnable)
+			{
+			if(time_flag&time_100ms)
+				{
+				RotateSELED();
+				time_flag&=~time_100ms;
+				}
+			}
+		else
+			{
+				SET_SELED0_PIN_H();
+				SET_SELED1_PIN_H();
+				SET_SELED2_PIN_H();
+				SET_SELED3_PIN_H();	
+			}
 		}
 	else					//Master
 		{
@@ -131,9 +158,9 @@ while(1)
 		switch(MasterModeFlag)
 			{
 			case 0:
-				if(time_flag==1)
+				if(time_flag&time_1s)
 				{
-				time_flag=0;
+				time_flag&=~time_1s;
 				RED_LED_L();
 				sx1278_LoRaEntryTx();			
 				sx1278_LoRaTxPacket();
@@ -157,9 +184,9 @@ while(1)
 				MasterModeFlag++;
 				break;
 			case 2:
-				if(time_flag==1)
+				if(time_flag&time_1s)
 					{
-					time_flag=0;
+					time_flag&=~time_1s;
 					MasterModeFlag=0;
 					}
 				break;
@@ -191,12 +218,12 @@ void mcu_init(void)
 void GPIO_Init(void) 
 //=====================================
 {
-		PA_DDR = 0b00000000;	
+		PA_DDR = 0b00000110;	
     PA_CR1 = 0b11111111;             
 		PA_CR2 = 0b00000000;
 		PA_ODR = 0b00000000;
 		
-		PB_DDR = 0b01000001;         
+		PB_DDR = 0b11001001;         
     PB_CR1 = 0b11111111;               
 		PB_CR2 = 0b01000001;
 		PB_ODR = 0b01000001;
@@ -372,7 +399,8 @@ void InitialRAM(void)
 //=====================================
 {
 	u8 action=0x00;
-	SysTime 				= 0;
+	SysTime0				=	0;
+	SysTime1 				= 0;
 	SystemFlag 			= 0x00;
 	mode 						= 0x01;//lora mode
 	Freq_Sel 				= 0x00;//433M
@@ -400,6 +428,55 @@ void InitialRAM(void)
 	Lora_Rate_Sel 	= 0x06;//
 	BandWide_Sel 		= 0x07;
 	Fsk_Rate_Sel 		= 0x00;	
+}
+
+//=====================================
+void RotateSELED(void)
+//=====================================
+{
+	switch(RotateLedFlag)
+		{
+			case 0:
+				SET_SELED0_PIN_L();
+				SET_SELED1_PIN_H();
+				SET_SELED2_PIN_H();
+				SET_SELED3_PIN_H();
+				break;
+			case 1:
+				SET_SELED0_PIN_H();
+				SET_SELED1_PIN_L();
+				SET_SELED2_PIN_H();
+				SET_SELED3_PIN_H();
+				break;
+			case 2:
+				SET_SELED0_PIN_H();
+				SET_SELED1_PIN_H();
+				SET_SELED2_PIN_L();
+				SET_SELED3_PIN_H();
+				break;
+			case 3:
+				SET_SELED0_PIN_H();
+				SET_SELED1_PIN_H();
+				SET_SELED2_PIN_H();
+				SET_SELED3_PIN_L();
+				break;				
+			case 4:
+				SET_SELED0_PIN_H();
+				SET_SELED1_PIN_H();
+				SET_SELED2_PIN_L();
+				SET_SELED3_PIN_H();
+				break;
+			case 5:
+				SET_SELED0_PIN_H();
+				SET_SELED1_PIN_L();
+				SET_SELED2_PIN_H();
+				SET_SELED3_PIN_H();
+				break;					
+		}
+		RotateLedFlag++;
+		if(RotateLedFlag>5)
+			RotateLedFlag=0;
+	
 }
 //=====================================
 void Test(void)
