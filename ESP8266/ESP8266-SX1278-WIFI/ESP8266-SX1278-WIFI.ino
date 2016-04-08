@@ -32,6 +32,10 @@ LED B	IO13/MOSI		-|						|-IO15/CS	LED R
 #include <WiFiClientSecure.h>
 #include <ArduinoJson.h>
 #include <SPI.h>
+#include <DNSServer.h>
+#include <ESP8266WebServer.h>
+#include <WiFiManager.h>
+
 #define u8 unsigned char
 //int led 			= 13;
 int SPI_CS_PIN 	= 15; 
@@ -100,8 +104,8 @@ const int LDR 		= A0;
 const int humidity_sensor 	= 4;
 
 //Value
-const char* ssid 	= "ExoDemo";
-const char* password = "@Exo1111";
+//const char* ssid 	= "PowerCloud";
+//const char* password = "0919680044";
 
 const char* host 	= "m2.exosite.com";
 const int httpsPort = 443;
@@ -116,13 +120,14 @@ unsigned char FanData;
 const long RPCinterval = 1200;//1.2sec
 unsigned long RPCpreviousTimeStamp;
 unsigned char HumidityData,TemperatureData;
+WiFiManager wifiManager;
 //===========================
 void setup() 
 //===========================
 {                
   // initialize the pins
   pinMode(SPI_CS_PIN, OUTPUT); 
-  pinMode(ANT_EN_PIN, OUTPUT);
+  pinMode(ANT_EN_PIN, INPUT);
   pinMode(RESET_PIN, OUTPUT);
   pinMode(DIO0_PIN, INPUT);  
   digitalWrite(DIO0_PIN, LOW);
@@ -131,7 +136,15 @@ void setup()
   SPI.setFrequency(1000000);
   SPI.begin();  
   delay(3000); 										// Wait for me to open serial monitor  
-  connectWiFi();
+  //connectWiFi();
+  if(digitalRead(ANT_EN_PIN)==0)
+    {
+    wifiManager.resetSettings();
+    Serial.println("RESETING WiFi SSID/PASSWORD");
+    }
+  pinMode(ANT_EN_PIN, OUTPUT);
+  wifiManager.autoConnect();
+  Serial.println("WiFi Connected");
 }
 
 //===========================
@@ -151,7 +164,8 @@ ReceiveData();
 
 //WiFi  
 if (WiFi.status() != WL_CONNECTED) 
-	connectWiFi();
+	//connectWiFi();
+  wifiManager.autoConnect();
   
 if (CurrentTimeStamp - RPCpreviousTimeStamp >= RPCinterval) 
 	{
@@ -424,7 +438,7 @@ void readAllRegs( )
 
 //===============================================		WIFI  ============================================
 
-
+/*
 //=================
 void connectWiFi(void)
 //=================
@@ -449,7 +463,7 @@ void connectWiFi(void)
   //digitalWrite(LED_BLUE, HIGH);
 }
 
-
+*/
 //=================
 void getRequestJson(JsonObject& root) 
 //=================
