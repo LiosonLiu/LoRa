@@ -25,6 +25,8 @@
             30  ->Tempeature
   
             31  ->Checksum
+            
+  7.IO      : See IO.h
 
 Note: SFM-1L module has 26MHz crystal on board, not 32MHz. RegFrf= 
   #
