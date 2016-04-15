@@ -12,12 +12,18 @@
 
               Slave->Receive Message-> Send Message back to Master
               
-6.Payload   : 32bytes
-  0~6 ->EXOSITE
+6.Payload   : 32bytes 
+  
+  0~6 ->EXOSITE 
+  
   7~27->Chip ID
-  28  ->Humidity
-  29  ->Tempeature High Byte
-  30  ->Tempeature Low Byte
+  
+  28  ->Fan
+  
+  29  ->Humidity
+  
+  30  ->Tempeature
+  
   31  ->Checksum
 
 Note: SFM-1L module has 26MHz crystal on board, not 32MHz. RegFrf= 
