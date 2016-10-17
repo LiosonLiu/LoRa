@@ -37,14 +37,12 @@ LED B	IO13/MOSI		-|						|-IO15/CS	LED R
 #include <WiFiManager.h>
 
 #define u8 unsigned char
-#define byte unsigned char
-char TXData[] 		= "EXOSITE0000000000000000000000000";
-char RXData[]			=	"00000000000000000000000000000000";
 //int led 			= 13;
 int SPI_CS_PIN 	= 15; 
 int DIO0_PIN 		= 16;
 int ANT_EN_PIN 	= 4;
 int RESET_PIN		= 5;
+
 #define REG_FIFO                    0x00
 #define REG_OPMODE                  0x01
 #define REG_FREQ23_16								0x06
@@ -71,15 +69,21 @@ int RESET_PIN		= 5;
 #define REG_DIO_MAPPING_1           0x40
 #define REG_DIO_MAPPING_2           0x41
 #define REG_LR_PADAC								0x4D
+
+char TXData[] 		= "EXOSITE0000000000000000000000000";
+char RXData[]			=	"00000000000000000000000000000000";
+
 // MODES
 #define LORA_SLEEP             			0x08
 #define LORA_STANDBY           			0x09
 #define LORA_TX				              0x8B
 #define LORA_RX_CONTINUOS      			0x8D
+
 // LOW NOISE AMPLIFIER
 #define REG_LNA                     0x0C
 #define LNA_MAX_GAIN                0x23  // 0010 0011
-#define LNA_OFF_GAIN                0x00	
+#define LNA_OFF_GAIN                0x00
+		
 #define CR													1			//1=>4/5,2=>4/6,3=>4/7,4=>4/8
 #define Lora_Rate_Sel								6
 #define BandWidth_Sel								7
@@ -93,30 +97,23 @@ const u8 sx1278LoRaBwTable[10] 			= {0,1,2,3,4,5,6,7,8,9};	//7.8KHz,10.4KHz,15.6
 u8 TXDataLength=32;
 u8 RXDataLength=32;
 
-void setLoRaMode(void);
-void InitialSendData(char buffer[]);
-void SendData(char buffer[]);
-void InitialReceiveData(void);
-unsigned ReceiveData(void);
-void ReadDataFromCloud(WiFiClientSecure& client);
-int	ASCIItoHex(int temp1,int temp2);
-byte SPIRead(byte addr);
-void SPIWrite(byte addr, byte value);
-void SPIBurstRead(u8 addr,char *ptr,u8 length);
-void SPIBurstWrite(u8 addr,char *ptr,u8 length);
 //========================WIFI==========================
 
 //Port
 const int LDR 		= A0;
 const int humidity_sensor 	= 4;
+
 //Value
+//const char* ssid 	= "PowerCloud";
+//const char* password = "0919680044";
+
 const char* host 	= "m2.exosite.com";
 const int httpsPort = 443;
-const char* cik  	= "10474144e4428eeb8ef8e7aeb27fbc3f3ae83280"; //embedded.exosite.com
+const char* cik  	= "85b9842bad2ec77d52d06bcb8df6a3deb1bb763d"; //embedded.exosite.com
 const char* aliasA 	= "fan_switch";
 const char* aliasB 	= "temperature_sensor";
 const char* aliasC 	= "humidity_sensor";
-const char* fingerprint = "1abbf683b33fb3e4ab4dd829e26608884e61e61d";
+const char* fingerprint = "AC 39 F8 6F EB 25 A7 4F E9 29 2B E0 E4 62 EA 5F 90 25 C3 07"; 
 String FanDataString;
 unsigned char FanData;
 const long RPCinterval = 1200;//1.2sec
@@ -366,7 +363,7 @@ void SPIWrite(byte addr, byte value)
 
 
 //===========================
-void setLoRaMode(void)
+void setLoRaMode()
 //===========================
 {
 digitalWrite(RESET_PIN,LOW);
