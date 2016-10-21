@@ -104,8 +104,7 @@ const int LDR 		= A0;
 const int humidity_sensor 	= 4;
 
 //Value
-//const char* ssid 	= "PowerCloud";
-//const char* password = "0919680044";
+
 
 const char* host 	= "m2.exosite.com";
 const int httpsPort = 443;
